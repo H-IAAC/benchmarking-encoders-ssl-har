@@ -75,7 +75,7 @@ The notebook handles checkpoint download, model instantiation, data loading, and
 All models are trained and evaluated on the [**DAGHAR**](https://github.com/H-IAAC/DAGHAR) benchmark  a curated collection of smartphone-based HAR datasets with a standardized view (6 IMU channels, window size 60) enabling fair cross-dataset comparison.
 
 - GitHub: [https://github.com/H-IAAC/DAGHAR](https://github.com/H-IAAC/DAGHAR)
-- Zenodo: [https://zenodo.org/records/11992126](https://zenodo.org/records/11992126)
+- Zenodo: [https://zenodo.org/records/13987073](https://zenodo.org/records/13987073)
 
 
 
@@ -99,7 +99,7 @@ All experiments in this paper were conducted using [**Minerva**](https://github.
   title={Benchmarking Encoders and Self-Supervised Learning for Smartphone-Based Human Activity Recognition},
   year={2026},
   volume={14},
-  pages={37451--37475},
+  pages={37451-37475},
   doi={10.1109/ACCESS.2026.3669412}
 }
 ```

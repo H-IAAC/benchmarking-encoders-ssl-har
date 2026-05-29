@@ -1,0 +1,49 @@
+Dataset,Data_Percentage,Best_Supervised,Best_SSL_Freeze,Best_SSL_Freeze_no_TFC,SSL_Freeze_Impact,SSL_Freeze_Impact_no_TFC,TFC_Impact_Freeze,Best_SSL_FT,Best_SSL_FT_no_TFC,SSL_FT_Impact,SSL_FT_Impact_no_TFC,TFC_Impact_FT,FT_vs_Freeze_Impact
+KH,1,50.2±5.0 (ResNet-SE-5),"41.0±10.9 (IMU Transformer, TFC)","47.0±1.7 (TS-TCC Encoder, TNC)",-9.3,-3.2,-6.0,"51.6±6.3 (ResNet-SE-5, TFC)","55.3±3.8 (ResNet-SE-5, TNC)",+1.4,+5.1,-3.7,+10.6
+KH,5,69.7±0.4 (ResNet-SE-5),"60.4±2.5 (TS2Vec Encoder, TFC)","60.9±6.5 (TS2Vec Encoder, Diet)",-9.3,-8.8,-0.5,"71.8±3.6 (CNN-PFF, TFC)","70.1±2.1 (ResNet-SE-5, TNC)",+2.1,+0.5,+1.6,+11.3
+KH,10,68.5±6.1 (ResNet-SE-5),"61.1±7.2 (TS2Vec Encoder, TFC)","63.4±8.3 (TS2Vec Encoder, Diet)",-7.4,-5.1,-2.3,"74.3±6.1 (CNN-PFF, TFC)","70.1±8.5 (IMU Transformer, LFR)",+5.8,+1.6,+4.2,+13.2
+KH,25,62.7±2.0 (TS-TCC Encoder),"73.4±2.1 (CNN-PFF, TFC)","69.2±1.4 (TS-TCC Encoder, LFR)",+10.6,+6.5,+4.2,"78.7±3.2 (CNN-PFF, TFC)","72.9±4.2 (TS-TCC Encoder, LFR)",+16.0,+10.2,+5.8,+5.3
+KH,50,63.2±7.9 (ResNet-SE-5),"74.5±2.9 (CNN-PFF, TFC)","71.3±2.4 (TS-TCC Encoder, LFR)",+11.3,+8.1,+3.2,"77.5±1.7 (CNN-PFF, TFC)","74.3±2.5 (TS-TCC Encoder, LFR)",+14.4,+11.1,+3.2,+3.0
+KH,100,67.8±7.0 (ResNet-SE-5),"73.6±3.5 (CNN-PFF, TFC)","72.9±2.1 (TS-TCC Encoder, LFR)",+5.8,+5.1,+0.7,"82.2±6.7 (TS2Vec Encoder, TFC)","75.9±1.1 (ResNet-SE-5, Diet)",+14.4,+8.1,+6.2,+8.6
+KH,200,67.1±7.6 (ResNet-SE-5),"75.2±3.1 (CNN-PFF, TFC)","75.2±4.0 (TS-TCC Encoder, LFR)",+8.1,+8.1,-0.0,"78.0±0.8 (CNN-PFF, TFC)","77.3±2.8 (ResNet-SE-5, Diet)",+10.9,+10.2,+0.7,+2.8
+KH,1000,75.7±0.7 (ResNet-SE-5),"73.8±4.0 (CNN-PFF, TFC)","74.8±1.4 (TS-TCC Encoder, LFR)",-1.9,-0.9,-0.9,"79.6±9.6 (TS2Vec Encoder, TFC)","76.4±1.4 (ResNet-SE-5, Diet)",+3.9,+0.7,+3.2,+5.8
+MS,1,58.6±5.2 (ResNet-SE-5),"43.0±10.7 (TS-TCC Encoder, TFC)","46.5±8.5 (ResNet-SE-5, TNC)",-15.6,-12.1,-3.6,"63.7±8.2 (TS-TCC Encoder, TFC)","61.5±9.5 (ResNet-SE-5, LFR)",+5.1,+2.9,+2.2,+20.8
+MS,5,71.9±2.2 (ResNet-SE-5),"67.6±2.0 (CNN-PFF, TFC)","61.6±2.7 (TS-TCC Encoder, TNC)",-4.3,-10.3,+6.0,"77.5±4.7 (CNN-PFF, TFC)","77.0±6.7 (ResNet-SE-5, LFR)",+5.5,+5.0,+0.5,+9.8
+MS,10,74.0±2.5 (ResNet-SE-5),"74.7±6.0 (CNN-PFF, TFC)","63.2±2.2 (CNN-PFF, Diet)",+0.7,-10.8,+11.5,"84.8±2.9 (CNN-PFF, TFC)","77.6±0.6 (ResNet-SE-5, LFR)",+10.8,+3.6,+7.2,+10.1
+MS,25,77.3±6.6 (ResNet-SE-5),"86.2±1.4 (CNN-PFF, TFC)","73.6±4.6 (CNN-PFF, Diet)",+8.9,-3.7,+12.6,"92.0±0.5 (CNN-PFF, TFC)","84.2±2.6 (TS2Vec Encoder, LFR)",+14.7,+6.9,+7.8,+5.8
+MS,50,83.3±0.7 (ResNet-SE-5),"86.9±1.1 (CNN-PFF, TFC)","77.1±5.4 (CNN-PFF, Diet)",+3.6,-6.3,+9.9,"92.1±1.4 (CNN-PFF, TFC)","91.6±0.8 (TS2Vec Encoder, LFR)",+8.8,+8.2,+0.6,+5.2
+MS,100,86.2±1.7 (TS2Vec Encoder),"88.7±0.8 (CNN-PFF, TFC)","81.4±5.0 (TS-TCC Encoder, LFR)",+2.4,-4.8,+7.3,"93.3±0.9 (CNN-PFF, TFC)","88.9±3.3 (TS2Vec Encoder, LFR)",+7.0,+2.7,+4.4,+4.6
+MS,200,90.7±3.6 (TS2Vec Encoder),"88.8±1.8 (CNN-PFF, TFC)","86.3±1.2 (TS-TCC Encoder, LFR)",-1.9,-4.4,+2.5,"93.6±1.3 (CNN-PFF, TFC)","92.8±1.3 (TS2Vec Encoder, Diet)",+2.9,+2.1,+0.8,+4.8
+MS,1000,94.3±1.9 (TS2Vec Encoder),"89.7±1.6 (CNN-PFF, TFC)","87.1±0.7 (TS-TCC Encoder, LFR)",-4.6,-7.2,+2.6,"94.0±3.6 (TS2Vec Encoder, TFC)","95.9±1.8 (TS2Vec Encoder, LFR)",-0.3,+1.6,-1.9,+4.3
+RW-Thigh,1,40.9±10.7 (IMU Transformer),"30.0±1.1 (TS-TCC Encoder, TFC)","40.0±6.3 (TS-TCC Encoder, TNC)",-10.9,-0.9,-10.0,"44.2±7.3 (CNN-PFF, TFC)","39.9±7.1 (IMU Transformer, TNC)",+3.2,-1.0,+4.2,+14.1
+RW-Thigh,5,59.2±4.9 (ResNet-SE-5),"52.0±7.3 (CNN-PFF, TFC)","46.0±2.8 (TS-TCC Encoder, TNC)",-7.2,-13.3,+6.0,"62.9±5.6 (CNN-PFF, TFC)","57.2±9.7 (ResNet-SE-5, LFR)",+3.6,-2.0,+5.7,+10.9
+RW-Thigh,10,64.5±2.6 (ResNet-SE-5),"60.6±11.5 (CNN-PFF, TFC)","50.2±2.5 (TS2Vec Encoder, TNC)",-3.8,-14.2,+10.4,"70.6±6.0 (CNN-PFF, TFC)","65.3±2.2 (ResNet-SE-5, TNC)",+6.2,+0.8,+5.4,+10.0
+RW-Thigh,25,70.1±1.3 (TS2Vec Encoder),"70.6±3.1 (CNN-PFF, TFC)","63.2±3.6 (CNN-PFF, LFR)",+0.4,-6.9,+7.4,"74.9±3.9 (CNN-PFF, TFC)","71.9±3.1 (ResNet-SE-5, LFR)",+4.8,+1.8,+3.0,+4.3
+RW-Thigh,50,72.1±0.8 (CNN-PFF),"68.2±3.4 (ResNet-SE-5, TFC)","67.5±3.9 (CNN-PFF, LFR)",-3.9,-4.6,+0.7,"78.3±1.7 (CNN-PFF, TFC)","74.3±0.4 (ResNet-SE-5, LFR)",+6.2,+2.2,+4.0,+10.1
+RW-Thigh,100,75.6±1.7 (TS2Vec Encoder),"76.4±0.9 (CNN-PFF, TFC)","69.0±1.7 (CNN-PFF, LFR)",+0.8,-6.7,+7.4,"79.8±2.1 (CNN-PFF, TFC)","73.1±2.2 (CNN-PFF, TNC)",+4.1,-2.6,+6.7,+3.4
+RW-Thigh,200,72.5±1.8 (CNN-PFF),"76.9±1.3 (CNN-PFF, TFC)","68.7±4.4 (CNN-PFF, TNC)",+4.4,-3.8,+8.2,"80.9±0.9 (CNN-PFF, TFC)","74.3±1.9 (CNN-PFF, TNC)",+8.3,+1.8,+6.6,+3.9
+RW-Thigh,1000,77.0±0.2 (TS2Vec Encoder),"75.7±0.6 (CNN-PFF, TFC)","72.8±1.8 (CNN-PFF, TNC)",-1.3,-4.2,+2.9,"79.5±1.6 (CNN-PFF, TFC)","77.2±1.4 (TS2Vec Encoder, TNC)",+2.5,+0.2,+2.3,+3.8
+RW-Waist,1,53.8±5.2 (ResNet-SE-5),"37.9±3.1 (RNN, TFC)","43.6±3.9 (TS-TCC Encoder, TNC)",-15.9,-10.2,-5.7,"58.3±4.8 (TS2Vec Encoder, TFC)","51.9±5.1 (ResNet-SE-5, LFR)",+4.5,-1.9,+6.4,+20.4
+RW-Waist,5,62.3±9.4 (ResNet-SE-5),"56.3±6.5 (CNN-PFF, TFC)","50.5±4.5 (TS2Vec Encoder, TNC)",-6.0,-11.8,+5.8,"71.5±1.9 (CNN-PFF, TFC)","61.3±7.5 (ResNet-SE-5, LFR)",+9.2,-1.0,+10.2,+15.3
+RW-Waist,10,61.4±3.8 (CNN-PFF),"58.6±1.1 (TS2Vec Encoder, TFC)","51.6±2.5 (TS-TCC Encoder, LFR)",-2.9,-9.9,+7.0,"74.0±1.9 (CNN-PFF, TFC)","65.4±3.9 (ResNet-SE-5, Diet)",+12.6,+4.0,+8.6,+15.5
+RW-Waist,25,69.7±3.8 (ResNet-SE-5),"70.9±1.8 (CNN-PFF, TFC)","67.1±1.0 (CNN-PFF, LFR)",+1.2,-2.6,+3.9,"76.6±1.9 (CNN-PFF, TFC)","70.6±3.3 (ResNet-SE-5, LFR)",+6.9,+1.0,+6.0,+5.7
+RW-Waist,50,70.3±2.7 (CNN-PFF),"76.0±2.0 (TS2Vec Encoder, TFC)","69.9±1.6 (CNN-PFF, LFR)",+5.7,-0.4,+6.1,"78.1±3.3 (TS2Vec Encoder, TFC)","72.0±2.5 (TS2Vec Encoder, LFR)",+7.8,+1.6,+6.1,+2.1
+RW-Waist,100,72.3±3.9 (TS2Vec Encoder),"76.8±3.0 (TS2Vec Encoder, TFC)","70.7±1.1 (CNN-PFF, LFR)",+4.5,-1.6,+6.1,"79.9±0.8 (TS2Vec Encoder, TFC)","74.7±3.6 (TS2Vec Encoder, LFR)",+7.6,+2.4,+5.2,+3.1
+RW-Waist,200,74.5±1.4 (CNN-PFF),"76.4±1.2 (CNN-PFF, TFC)","72.1±1.9 (CNN-PFF, TNC)",+1.9,-2.4,+4.3,"79.5±2.0 (CNN-PFF, TFC)","75.1±1.9 (TS2Vec Encoder, LFR)",+5.0,+0.6,+4.4,+3.1
+RW-Waist,1000,74.1±5.2 (TS2Vec Encoder),"76.8±1.2 (CNN-PFF, TFC)","74.5±0.6 (CNN-PFF, TNC)",+2.8,+0.4,+2.4,"81.6±0.9 (TS2Vec Encoder, TFC)","79.7±1.7 (TS2Vec Encoder, TNC)",+7.5,+5.6,+1.9,+4.8
+UCI,1,57.6±9.3 (ResNet-SE-5),"42.8±4.3 (TS2Vec Encoder, TFC)","53.3±8.7 (TS2Vec Encoder, TNC)",-14.9,-4.3,-10.6,"54.4±10.6 (TS-TCC Encoder, TFC)","63.0±5.8 (ResNet-SE-5, LFR)",-3.2,+5.4,-8.6,+11.6
+UCI,5,77.1±2.3 (ResNet-SE-5),"63.2±6.9 (CNN-PFF, TFC)","68.2±2.6 (TS2Vec Encoder, TNC)",-14.0,-8.9,-5.0,"78.6±3.1 (TS2Vec Encoder, TFC)","76.1±3.9 (ResNet-SE-5, TNC)",+1.4,-1.1,+2.5,+15.4
+UCI,10,76.7±0.9 (ResNet-SE-5),"75.7±3.7 (TS2Vec Encoder, TFC)","71.3±2.6 (TS2Vec Encoder, Diet)",-0.9,-5.4,+4.4,"82.8±2.8 (CNN-PFF, TFC)","78.0±0.9 (ResNet-SE-5, TNC)",+6.1,+1.4,+4.8,+7.1
+UCI,25,79.9±1.6 (ResNet-SE-5),"84.1±1.7 (TS2Vec Encoder, TFC)","77.3±2.1 (TS2Vec Encoder, LFR)",+4.2,-2.5,+6.7,"90.3±1.5 (TS2Vec Encoder, TFC)","81.4±1.1 (ResNet-SE-5, Diet)",+10.5,+1.5,+8.9,+6.3
+UCI,50,85.5±2.1 (ResNet-SE-5),"85.7±2.0 (CNN-PFF, TFC)","80.5±0.2 (TS2Vec Encoder, LFR)",+0.2,-5.0,+5.2,"93.0±0.7 (TS2Vec Encoder, TFC)","87.4±0.9 (ResNet-SE-5, Diet)",+7.5,+1.9,+5.6,+7.2
+UCI,100,91.5±1.6 (ResNet-SE-5),"87.7±0.6 (CNN-PFF, TFC)","81.5±2.1 (TS2Vec Encoder, Diet)",-3.8,-10.0,+6.2,"94.7±0.7 (TS2Vec Encoder, TFC)","90.6±1.0 (TS2Vec Encoder, Diet)",+3.2,-0.9,+4.2,+7.0
+UCI,200,92.4±2.0 (TS2Vec Encoder),"88.8±1.0 (CNN-PFF, TFC)","84.3±0.3 (TS2Vec Encoder, Diet)",-3.6,-8.1,+4.5,"95.4±0.6 (TS2Vec Encoder, TFC)","93.2±1.4 (ResNet-SE-5, TNC)",+3.0,+0.8,+2.2,+6.6
+UCI,1000,94.7±0.7 (ResNet-SE-5),"89.7±1.7 (CNN-PFF, TFC)","85.3±1.4 (TS2Vec Encoder, Diet)",-5.1,-9.4,+4.3,"95.9±0.3 (CNN-PFF, TFC)","95.4±0.9 (ResNet-SE-5, Diet)",+1.2,+0.6,+0.5,+6.2
+WISDM,1,48.3±12.2 (IMU Transformer),"46.6±6.3 (TS2Vec Encoder, TFC)","58.2±10.4 (ResNet-SE-5, TNC)",-1.7,+9.9,-11.5,"55.1±9.3 (TS-TCC Encoder, TFC)","59.2±13.3 (ResNet-SE-5, TNC)",+6.8,+10.9,-4.1,+8.5
+WISDM,5,71.6±1.6 (ResNet-SE-5),"63.7±8.3 (TS2Vec Encoder, TFC)","68.7±5.6 (TS-TCC Encoder, TNC)",-7.9,-2.9,-5.0,"72.0±3.8 (RNN, TFC)","72.7±5.9 (ResNet-SE-5, LFR)",+0.4,+1.1,-0.7,+8.4
+WISDM,10,71.7±1.5 (IMU Transformer),"68.4±5.6 (RNN, TFC)","68.2±4.0 (TS-TCC Encoder, TNC)",-3.3,-3.5,+0.2,"76.1±1.4 (RNN, TFC)","75.1±1.8 (ResNet-SE-5, LFR)",+4.4,+3.4,+1.0,+7.7
+WISDM,25,77.6±0.6 (TS-TCC Encoder),"77.5±0.8 (CNN-PFF, TFC)","72.8±2.2 (TS-TCC Encoder, TNC)",-0.1,-4.7,+4.6,"83.6±0.7 (CNN-PFF, TFC)","76.6±0.4 (TS-TCC Encoder, LFR)",+6.0,-1.0,+7.0,+6.1
+WISDM,50,75.2±2.9 (TS-TCC Encoder),"84.0±2.3 (CNN-PFF, TFC)","75.6±0.9 (TS2Vec Encoder, LFR)",+8.9,+0.5,+8.4,"85.8±2.0 (CNN-PFF, TFC)","79.0±1.9 (ResNet-SE-5, LFR)",+10.7,+3.8,+6.9,+1.8
+WISDM,100,78.2±1.1 (CNN-PFF),"84.7±2.2 (CNN-PFF, TFC)","76.8±1.9 (TS2Vec Encoder, LFR)",+6.4,-1.4,+7.8,"87.1±0.3 (CNN-PFF, TFC)","82.3±2.4 (ResNet-SE-5, LFR)",+8.9,+4.1,+4.8,+2.5
+WISDM,200,81.8±1.6 (ResNet-SE-5),"85.8±1.4 (CNN-PFF, TFC)","79.1±1.0 (RNN, LFR)",+4.0,-2.7,+6.7,"88.2±1.5 (CNN-PFF, TFC)","84.5±0.9 (TS2Vec Encoder, LFR)",+6.4,+2.7,+3.7,+2.4
+WISDM,1000,87.3±0.9 (CNN-PFF),"87.2±1.4 (CNN-PFF, TFC)","85.2±0.3 (TS-TCC Encoder, Diet)",-0.1,-2.0,+2.0,"90.7±0.5 (CNN-PFF, TFC)","89.2±0.3 (TS2Vec Encoder, LFR)",+3.4,+2.0,+1.4,+3.5

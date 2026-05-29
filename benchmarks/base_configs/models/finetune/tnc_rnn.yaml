@@ -1,0 +1,58 @@
+class_path: minerva.models.nets.base.SimpleSupervisedModel
+init_args:
+  backbone: 
+    class_path: minerva.models.loaders.FromPretrained
+    init_args:
+      model:
+        class_path: minerva.models.nets.tnc.RnnEncoder
+        init_args:
+          hidden_size: 100
+          in_channel: 6
+          encoding_size: 320
+          cell_type: 'GRU'
+          num_layers: 1
+          dropout: 0
+          bidirectional: True
+          permute: True
+      ckpt_path: null   # (???) It will be overwritten by execution dinamically
+      filter_keys: ["backbone"]
+      strict: True
+      error_on_missing_keys: True
+      keys_to_rename: { "backbone.":""}
+  fc: 
+    class_path: minerva.models.nets.mlp.MLP
+    init_args:
+      layer_sizes: [320, 128, 6]
+  loss_fn: 
+    class_path: torch.nn.CrossEntropyLoss
+  flatten: False
+  train_metrics:
+    accuracy:
+      class_path: torchmetrics.Accuracy
+      init_args:
+        num_classes: 6
+        task: "multiclass"
+  val_metrics:
+    accuracy:
+      class_path: torchmetrics.Accuracy
+      init_args:
+        num_classes: 6
+        task: "multiclass"
+  test_metrics:
+    accuracy:
+      class_path: torchmetrics.Accuracy
+      init_args:
+        num_classes: 6
+        task: "multiclass"
+    f1:
+      class_path: torchmetrics.F1Score
+      init_args:
+        num_classes: 6
+        task: "multiclass"
+        average: "weighted"
+    balanced_accuracy:
+      class_path: torchmetrics.Accuracy
+      init_args:  
+        num_classes: 6
+        task: "multiclass"
+        average: "macro"

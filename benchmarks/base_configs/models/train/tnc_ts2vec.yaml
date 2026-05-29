@@ -1,0 +1,16 @@
+class_path: minerva.models.ssl.tnc.TNC
+init_args:
+  backbone: 
+    class_path: minerva.models.nets.tnc.TSEncoder
+    init_args:
+      input_dims: 6
+      output_dims: 320
+      hidden_dims: 64
+      depth: 10
+      permute: False
+  projection_head:
+    class_path: minerva.models.nets.tnc.Discriminator_TNC
+    init_args:
+      input_size: 320
+      max_pool: True
+  w: 0.2

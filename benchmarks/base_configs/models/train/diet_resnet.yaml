@@ -1,0 +1,15 @@
+class_path: minerva.models.ssl.diet.DIET
+init_args:
+  backbone:
+    class_path: minerva.models.nets.time_series.resnet._ResNet1D
+    init_args:
+      input_shape: [6, 60]
+      avg_pooling: True
+  linear_head: null
+  num_data: null
+  flatten: True
+  adapter: null
+  loss: null
+  learning_rate: 3e-4
+  weight_decay: 3e-4
+  wca_scheduler_total_epochs: null

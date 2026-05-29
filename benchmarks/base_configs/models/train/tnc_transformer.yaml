@@ -1,0 +1,20 @@
+class_path: minerva.models.ssl.tnc.TNC
+init_args:
+  backbone:
+    class_path: minerva.models.nets.time_series.imu_transformer._IMUTransformerEncoder
+    init_args:
+      input_shape: [6,60]
+      transformer_dim : 64
+      encode_position : True
+      nhead: 8
+      dim_feedforward : 128
+      transformer_dropout : 0.1
+      transformer_activation : "gelu"
+      num_encoder_layers : 6
+      permute: True
+  projection_head:
+    class_path: minerva.models.nets.tnc.Discriminator_TNC
+    init_args:
+      input_size: 64
+      max_pool: False
+  w: 0.2

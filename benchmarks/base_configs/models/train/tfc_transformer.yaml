@@ -1,0 +1,39 @@
+class_path: minerva.models.ssl.tfc.TFC_Model
+init_args:
+  input_channels: 6
+  batch_size: 64
+  TS_length: 60
+  num_classes: 6
+  single_encoding_size: 128
+  backbone:
+    class_path: minerva.models.nets.tfc.TFC_Backbone
+    init_args:
+      input_channels: 6
+      TS_length: 60
+      single_encoding_size: 128
+      time_encoder:
+        class_path: minerva.models.nets.time_series.imu_transformer._IMUTransformerEncoder
+        init_args:
+          input_shape: [6,60]
+          transformer_dim : 64
+          encode_position : True
+          nhead: 8
+          dim_feedforward : 128
+          transformer_dropout : 0.1
+          transformer_activation : "gelu"
+          num_encoder_layers : 6
+          permute: False
+      frequency_encoder:
+        class_path: minerva.models.nets.time_series.imu_transformer._IMUTransformerEncoder
+        init_args:
+          input_shape: [6,60]
+          transformer_dim : 64
+          encode_position : True
+          nhead: 8
+          dim_feedforward : 128
+          transformer_dropout : 0.1
+          transformer_activation : "gelu"
+          num_encoder_layers : 6
+          permute: False
+  pred_head: null
+  

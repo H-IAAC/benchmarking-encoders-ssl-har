@@ -1,0 +1,42 @@
+{
+    "workspaceFolder": "/workspaces/benchmarking-encoders-ssl-har",
+    "containerUser": "vscode",
+    "build": {
+        "dockerfile": "Dockerfile"
+    },
+    "postStartCommand": "/workspaces/benchmarking-encoders-ssl-har/.devcontainer/post_start.sh",
+    "mounts": [
+        "source=/home/shared,target=/workspaces/benchmarking-encoders-ssl-har/shared_data,type=bind,consistency=cached"
+    ],
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "ms-toolsai.vscode-jupyter-powertoys",
+                "ms-python.python",
+                "njpwerner.autodocstring",
+                "ms-toolsai.jupyter",
+                "ms-python.black-formatter",
+                "github.copilot",
+                "donjayamanne.git-extension-pack",
+                "akamud.vscode-theme-onedark",
+                "janisdd.vscode-edit-csv"
+            ]
+        }
+    },
+    "runArgs": [
+        "--gpus",
+        "all",
+        "--shm-size",
+        "1g",
+        "--ipc",
+        "host",
+        "--network",
+        "host",
+        "--ulimit",
+        "memlock=-1",
+        "--ulimit",
+        "stack=67108864",
+        "--name",
+        "benchmarking-encoders-ssl-har"
+    ]
+}

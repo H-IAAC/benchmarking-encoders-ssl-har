@@ -1,0 +1,9 @@
+class_path: minerva.data.data_modules.har_rodrigues_24.HARDataModuleCPC
+init_args:
+  data_path: "/home/gustavo-luz/code/hiaac/paper_access_private_git/Benchmarking_Enconders_SSL/shared_data/rodrigues_2024_datasets/1-1/rw-tight"
+  input_size: 6
+  window: 60
+  overlap: 60
+  batch_size: 64
+  drop_last: False
+  use_val_with_train: True

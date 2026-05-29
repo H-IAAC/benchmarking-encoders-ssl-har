@@ -1,0 +1,9 @@
+class_path: minerva.data.data_modules.har.MultiModalHARSeriesDataModule
+init_args:
+  data_path: "/home/gustavo-luz/code/hiaac/paper_access_private_git/Benchmarking_Enconders_SSL/shared_data/daghar/standardized_view/UCI/"
+  feature_prefixes: ["accel-x", "accel-y", "accel-z", "gyro-x", "gyro-y", "gyro-z"]
+  label: "standard activity code"
+  features_as_channels: True
+  cast_to: "float32"
+  batch_size: 64
+  data_percentage: 1.0

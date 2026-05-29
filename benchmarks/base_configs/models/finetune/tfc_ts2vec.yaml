@@ -1,0 +1,74 @@
+class_path: minerva.models.nets.base.SimpleSupervisedModel
+init_args:
+  backbone:
+    class_path: minerva.models.loaders.FromPretrained
+    init_args:
+      model: 
+        class_path: minerva.models.nets.tfc.TFC_Backbone
+        init_args:
+          input_channels: 6
+          TS_length: 60
+          single_encoding_size: 128
+          time_encoder:
+            class_path: minerva.models.nets.tnc.TSEncoder
+            init_args:
+              input_dims: 6
+              output_dims: 320
+              hidden_dims: 64
+              depth: 10
+              permute: True
+          frequency_encoder:
+            class_path: minerva.models.nets.tnc.TSEncoder
+            init_args:
+              input_dims: 6
+              output_dims: 320
+              hidden_dims: 64
+              depth: 10
+              permute: True
+          adapter:
+            class_path: minerva.models.adapters.MaxPoolingTransposingSqueezingAdapter
+            init_args:
+              kernel_size: 60
+      ckpt_path: null   # (???) It will be overwritten by execution dinamically
+      filter_keys: ["backbone"] 
+      strict: True
+      error_on_missing_keys: True
+      keys_to_rename: {"backbone." : ""}
+  fc:
+    class_path: minerva.models.nets.mlp.MLP
+    init_args:
+      layer_sizes: [256, 128, 6]
+  loss_fn: 
+    class_path: torch.nn.CrossEntropyLoss
+    init_args: {}
+  flatten: false
+  train_metrics:
+    accuracy:
+      class_path: torchmetrics.Accuracy
+      init_args:
+        num_classes: 6
+        task: "multiclass"
+  val_metrics:
+    accuracy:
+      class_path: torchmetrics.Accuracy
+      init_args:
+        num_classes: 6
+        task: "multiclass"
+  test_metrics:
+    accuracy:
+      class_path: torchmetrics.Accuracy
+      init_args:
+        num_classes: 6
+        task: "multiclass"
+    f1:
+      class_path: torchmetrics.F1Score
+      init_args:
+        num_classes: 6
+        task: "multiclass"
+        average: "weighted"
+    balanced_accuracy:
+      class_path: torchmetrics.Accuracy
+      init_args:  
+        num_classes: 6
+        task: "multiclass"
+        average: "macro"

@@ -1,0 +1,14 @@
+class_path: minerva.models.ssl.tnc.TNC
+init_args:
+  backbone: 
+    class_path: minerva.models.nets.time_series.cnns.CNN_PF_Backbone
+    init_args:
+      include_middle: True
+      permute: True
+      flatten: True
+  projection_head:
+    class_path: minerva.models.nets.tnc.Discriminator_TNC
+    init_args:
+      input_size: 768
+      max_pool: False
+  w: 0.2

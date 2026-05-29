@@ -1,0 +1,82 @@
+model: null                 # (???) It will be overwritten dinamically (model/file_path, from CSV)
+trainer:
+  class_path: lightning.Trainer
+  init_args:
+    accelerator: gpu        # The accelerator to use.
+    devices: 1              # Number of GPUs to use (when using GPU).
+    strategy: auto          # Strategy to use for distributed training.
+    benchmark: True       # If true enables cudnn.benchmark.
+    logger:
+      class_path: lightning.pytorch.loggers.CSVLogger
+      init_args:
+        save_dir: null      # (???) It will be overwritten dinamically (log_dir, from schemas.py)
+        name: null          # (???) It will be overwritten dinamically (execution/uid, from CSV)
+        version: null       # (???) It will be overwritten dinamically (version_name, from schemas.py)
+    deterministic: warn
+classification_metrics:
+  accuracy:
+    class_path: torchmetrics.Accuracy
+    init_args:
+      num_classes: 6
+      task: "multiclass"
+  f1_score_macro:
+    class_path: torchmetrics.F1Score
+    init_args:
+      num_classes: 6
+      average: "macro"
+      task: "multiclass"
+  f1_score_micro:
+    class_path: torchmetrics.F1Score
+    init_args:
+      num_classes: 6
+      average: "micro"
+      task: "multiclass"
+  recall:
+    class_path: torchmetrics.Recall
+    init_args:
+      num_classes: 6
+      average: "macro"
+      task: "multiclass"
+  precision:
+    class_path: torchmetrics.Precision
+    init_args:
+      num_classes: 6
+      average: "macro"
+      task: "multiclass"
+  balanced_accuracy:
+    class_path: torchmetrics.Accuracy
+    init_args:
+      num_classes: 6
+      task: "multiclass"
+model_analysis:
+  tsne:
+    class_path: minerva.analysis.model_analysis.TSNEAnalysis
+    init_args:
+      text_size: 28
+      label_names: 
+        0: "sit"
+        1: "stand"
+        2: "walk"
+        3: "stair up"
+        4: "stair down"
+        5: "run"
+        6: "stair up and down"
+      marker_symbols:
+        "sit": "x-open"
+        "stand": "cross-open"
+        "stair up": "triangle-up-open"
+        "stair down": "triangle-down-open"
+        "walk": "circle-open"
+        "run": "star-open"
+      height: 1000
+      width: 1000
+      legend_title: "Activity"
+      title: " "
+      output_filename: "tnse_analysis.png"
+      x_axis_title: '1st Component'
+      y_axis_title: '2nd Component'
+apply_metrics_per_sample: False
+run:
+  task: evaluate
+  data: null                # (???) It will be overwritten dinamically (data/file_path)
+  ckpt_path: null           # (???) It will be overwritten by execution dinamically (if ckpt/resume is set to True)

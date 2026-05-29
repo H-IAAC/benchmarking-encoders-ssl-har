@@ -1,0 +1,3 @@
+override_id,config,name,overrides
+full_finetune,finetune,*,"freeze_backbone=False learning_rate=1e-4"
+freeze,finetune,*,"freeze_backbone=True learning_rate=1e-4"

@@ -65,13 +65,15 @@ Each experiment directory has the same internal layout:
 <technique>/<name>_run{N}/
 ├── configs/
 │   ├── experiments.csv       # Defines pretrain → finetune → evaluate pipeline
-│   ├── generated_executions.csv  # DAG produced by execution_planner.py (commit when stable)
+│   ├── generated_executions.csv  # DAG produced by execution_planner.py
 │   └── overrides/
 │       ├── data_modules.csv  # Data percentage and sample-count overrides
 │       ├── models.csv        # Freeze vs. full-finetune strategy
 │       └── pipelines.csv     # Epoch count overrides
 └── logs/                     # Training logs (generated at runtime)
 ```
+
+> **Note**: each experiment needs a `logs/` folder to run, since `execution_planner.py` writes to `--log_dir "<experiment>/logs"`. create it manually or `mkdir logs/`
 
 ### Pipeline defined in `experiments.csv`
 

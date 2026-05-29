@@ -1,0 +1,31 @@
+class_path: minerva.models.nets.base.SimpleSupervisedModel
+init_args:
+  backbone:
+    class_path: minerva.models.nets.time_series.cnns.CNN_PF_Backbone
+    init_args:
+      include_middle: True
+  fc:
+    class_path: minerva.models.nets.mlp.MLP
+    init_args:
+      layer_sizes: [768,128,6]
+  loss_fn: 
+    class_path: torch.nn.CrossEntropyLoss
+  flatten: True
+  train_metrics:
+    accuracy:
+      class_path: torchmetrics.Accuracy
+      init_args:
+        num_classes: 6
+        task: "multiclass"
+  val_metrics:
+    accuracy:
+      class_path: torchmetrics.Accuracy
+      init_args:
+        num_classes: 6
+        task: "multiclass"
+  test_metrics:
+    accuracy:
+      class_path: torchmetrics.Accuracy
+      init_args:
+        num_classes: 6
+        task: "multiclass"

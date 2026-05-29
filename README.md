@@ -78,6 +78,26 @@ All models are trained and evaluated on the [**DAGHAR**](https://github.com/H-IA
 - Zenodo: [https://zenodo.org/records/13987073](https://zenodo.org/records/13987073)
 
 
+### Downloading Data
+
+Data is **not** included in the repository. Download and prepare all datasets with:
+
+```bash
+./download_data.sh
+```
+
+This will populate a new folder `shared_data/` with:
+
+```
+shared_data/
+├── daghar/standardized_view/          # DAGHAR benchmark (6 datasets)
+├── rodrigues_2024_datasets/1-1/       # Per-user CSVs for SSL pretraining
+└── xu_2023_datasets/1-1/             # NumPy arrays for TNC pretraining
+```
+
+See [`prepare_data.py`](prepare_data.py) for advanced options (custom root, skip download, partial preparation).
+
+---
 
 ---
 
@@ -86,7 +106,53 @@ All models are trained and evaluated on the [**DAGHAR**](https://github.com/H-IA
 All experiments in this paper were conducted using [**Minerva**](https://github.com/discovery-unicamp/Minerva), a PyTorch Lightning-based framework for training machine learning models. Minerva provides the model definitions, SSL pipelines, data modules, and evaluation tools used throughout this benchmark.
 
 - GitHub: [https://github.com/discovery-unicamp/Minerva](https://github.com/discovery-unicamp/Minerva)
-- PyPI: [https://pypi.org/project/minerva/](https://pypi.org/project/minerva/) (`pip install minerva`)
+- PyPI: [https://pypi.org/project/minerva/](https://pypi.org/project/minerva/) (`pip install minerva==0.3.10b0`)
+
+---
+
+## 1. Python environment
+
+Recommended: Python ≥ 3.10 in an isolated environment.
+
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+python -m pip install --upgrade pip
+```
+
+---
+
+## 2. Install dependencies
+
+```bash
+pip install -r requirements.txt
+pip uninstall pandas
+pip install pandas==2.3.3
+```
+
+This installs Minerva (`minerva==0.3.10b0`) and the packages used by the orchestration scripts under `benchmarks/scripts/` (`pandas`, `pandasql`, `networkx`, `ray`, etc.).
+
+---
+
+## 3. Verify the installation
+
+```bash
+python -c "import minerva; print('minerva:', minerva.__version__)"
+python -c "import ray, pandasql, networkx; print('extras OK')"
+```
+
+---
+
+## Notes
+
+- **Ray**: `submit_it.py` assumes an active Ray cluster. Start a local one with:
+  ```bash
+  ray start --head --port=6379
+  ```
+- **GPU**: to run pretraining/finetuning you'll need a GPU compatible with the PyTorch version shipped with Minerva. If you have trouble with pytorch you can uninstall and install specific wheels (e.g `pip install --index-url https://download.pytorch.org/whl/cu121`       torch torchvision )
+- **Docker / VSCode dev container**: a ready-to-use alternative is documented in [`set_docker.md`](set_docker.md).
+
+
 
 ---
 
@@ -108,4 +174,27 @@ All experiments in this paper were conducted using [**Minerva**](https://github.
 
 ## Pre-Training Replication
 
-> **📢 Coming soon (next weeks):** Full step-by-step instructions to also replicate the entire pre-training pipeline with Minerva, with configs, experiment execution, and result analysis.
+Full step-by-step instructions to also replicate the entire pre-training pipeline with Minerva, with configs, experiment execution, and result analysis.
+
+
+### Repository layout
+
+```
+benchmarking-encoders-ssl-har/
+├── requirements.txt
+└── benchmarks/
+    ├── scripts/              ← planner, submitter, summarizer (see scripts/README.md)
+    ├── base_configs/         ← base YAML configs (data_modules / models / pipelines)
+    └── paper_experiments/
+        ├── to_be_validated/  ← ALL paper experiments (static catalog)
+        ├── validation_run/   ← currently running (work area)
+        └── validated/        ← finished
+    ├── paper_results/         ← analysis of the results presented in the paper
+├── download_data.sh
+├── prepare_data.py
+├── set_docker.md
+├── ssl_har_model_zoo.ipynb
+```
+
+The lifecycle is: copy from `to_be_validated/` → run in `validation_run/` → move to `validated/`. See **[`benchmarks/paper_experiments/README.md`](benchmarks/paper_experiments/README.md)** for details on how to run and analyse results.
+

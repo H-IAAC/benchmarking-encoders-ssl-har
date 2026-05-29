@@ -1,0 +1,34 @@
+model: null                 # (???) It will be overwritten dinamically (model/file_path, from CSV)
+trainer:
+  class_path: lightning.Trainer
+  init_args:
+    accelerator: gpu        # The accelerator to use.
+    devices: 1              # Number of GPUs to use (when using GPU).
+    strategy: auto          # Strategy to use for distributed training.
+    max_epochs: 100         # Number of epochs to train.
+    log_every_n_steps: 100  # How often to log within steps.
+    benchmark: True        # If true enables cudnn.benchmark.
+    logger:
+      class_path: lightning.pytorch.loggers.csv_logs.CSVLogger
+      init_args:
+        save_dir: null      # (???) It will be overwritten dinamically (log_dir, from schemas.py)
+        name: null          # (???) It will be overwritten dinamically (execution/uid, from CSV)
+        version: null       # (???) It will be overwritten dinamically (version_name, from schemas.py)
+    callbacks:
+    - class_path: lightning.pytorch.callbacks.ModelCheckpoint
+      init_args:
+        monitor: val_loss   # The metric to monitor.
+        mode: min           # The direction to optimize the metric.
+        save_last: true     # Whether to save the last checkpoint.
+        save_top_k: 1       # The number of best checkpoints to save.
+        filename: best  # This ensures the best model is saved as 'best.ckpt'
+    - class_path: lightning.pytorch.callbacks.EarlyStopping
+      init_args:
+        monitor: val_loss   # The metric to monitor.
+        patience: 50        # The number of epochs with no improvement after which training will be stopped.
+        mode: min           # The direction to optimize the metric.
+    deterministic: warn
+run:
+  task: fit                 # The task to run.
+  data: null                # (???) It will be overwritten dinamically (data/file_path)
+  ckpt_path: null           # (???) It will be overwritten by execution dinamically (if ckpt/resume is set to True)

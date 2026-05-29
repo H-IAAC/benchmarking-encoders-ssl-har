@@ -1,0 +1,29 @@
+class_path: minerva.models.ssl.lfr.LearnFromRandomnessModel
+init_args:
+  backbone:
+    class_path: minerva.models.nets.time_series.cnns.CNN_PF_Backbone
+    init_args:
+      include_middle: True
+      flatten: True
+  projectors:
+    class_path: minerva.models.nets.lfr_har_architectures.LFR_HAR_Projector_List
+    init_args:
+      size: 60
+      encoding_size: 768
+      input_channel: 6
+      middle_dim: 544
+  predictors:
+    class_path: minerva.models.nets.lfr_har_architectures.LFR_HAR_Predictor_List
+    init_args:
+      size: 60
+      encoding_size: 768
+      middle_dim: 128
+      num_layers: 1
+  num_targets: 6
+  loss_fn: null
+  adapter: null
+  learning_rate: 3e-4
+  weight_decay: 3e-4
+  flatten: False
+  predictor_training_epochs: 5
+  max_backbone_training_steps: null

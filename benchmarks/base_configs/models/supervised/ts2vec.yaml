@@ -1,0 +1,40 @@
+class_path: minerva.models.nets.base.SimpleSupervisedModel
+init_args:
+  backbone: 
+    class_path: minerva.models.nets.tnc.TSEncoder
+    init_args:
+      input_dims: 6
+      output_dims: 320
+      hidden_dims: 64
+      depth: 10
+      permute: True
+  fc:
+    class_path: minerva.models.nets.mlp.MLP
+    init_args:
+      layer_sizes: [320,128,6]
+  loss_fn: 
+    class_path: torch.nn.CrossEntropyLoss
+  flatten: False
+  adapter: 
+    class_path: minerva.models.adapters.MaxPoolingTransposingSqueezingAdapter
+    init_args:
+      kernel_size: 60
+  train_metrics:
+    accuracy:
+      class_path: torchmetrics.Accuracy
+      init_args:
+        num_classes: 6
+        task: "multiclass"
+  val_metrics:
+    accuracy:
+      class_path: torchmetrics.Accuracy
+      init_args:
+        num_classes: 6
+        task: "multiclass"
+  test_metrics:
+    accuracy:
+      class_path: torchmetrics.Accuracy
+      init_args:
+        num_classes: 6
+        task: "multiclass"
+

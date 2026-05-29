@@ -1,0 +1,35 @@
+class_path: minerva.models.ssl.lfr.LearnFromRandomnessModel
+init_args:
+  backbone:
+    class_path: minerva.models.nets.tnc.RnnEncoder
+    init_args:
+      hidden_size: 100
+      in_channel: 6
+      encoding_size: 320
+      cell_type: 'GRU'
+      num_layers: 1
+      dropout: 0
+      bidirectional: True
+      permute: True
+  projectors:
+    class_path: minerva.models.nets.lfr_har_architectures.LFR_HAR_Projector_List
+    init_args:
+      size: 60
+      encoding_size: 320
+      input_channel: 6
+      middle_dim: 544
+  predictors:
+    class_path: minerva.models.nets.lfr_har_architectures.LFR_HAR_Predictor_List
+    init_args:
+      size: 60
+      encoding_size: 320
+      middle_dim: 128
+      num_layers: 1
+  num_targets: 6
+  loss_fn: null
+  adapter: null
+  learning_rate: 3e-4
+  weight_decay: 3e-4
+  flatten: False
+  predictor_training_epochs: 5
+  max_backbone_training_steps: null

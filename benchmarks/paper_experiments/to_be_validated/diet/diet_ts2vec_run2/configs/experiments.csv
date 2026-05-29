@@ -1,0 +1,4 @@
+execution/id,model/config,model/name,model/override_id,data/data_module,data/view,data/dataset,data/partition,data/name,data/override_id,pipeline/task,pipeline/name,pipeline/override_id,backbone/load_from_id,ckpt/resume
+pretrain_diet_ts2vec_1,train,diet_ts2vec,*,journal_backbones,for_pretrain,*,train,,,har,train_without_early_stopping,train_for_100_epochs,,
+finetune_diet_ts2vec_1,finetune,diet_ts2vec,,multimodal_df,daghar_standardized_balanced,*,train,,,har,train,,"other.""execution/id"" = ""pretrain_diet_ts2vec_1"" AND this.""data/dataset"" = other.""data/dataset""",
+evaluate_diet_ts2vec_1,finetune,diet_ts2vec,,multimodal_df,daghar_standardized_balanced,*,test,,multimodal_perc_100,har,evaluate,,"other.""execution/id"" = ""finetune_diet_ts2vec_1"" AND this.""data/dataset"" = other.""data/dataset""  AND this.""data/name"" = other.""data/name"" AND other.""model/override_id"" = this.""model/override_id""",true

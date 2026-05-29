@@ -1,0 +1,13 @@
+class_path: minerva.models.ssl.tnc.TNC
+init_args:
+  backbone: 
+    class_path: minerva.models.nets.tnc.ResNetEncoder
+    init_args:
+      input_shape: [6, 60]
+      residual_block_cls: minerva.models.nets.time_series.resnet.ResNetSEBlock
+  projection_head:
+    class_path: minerva.models.nets.tnc.Discriminator_TNC
+    init_args:
+      input_size: 64
+      max_pool: False
+  w: 0.2

@@ -1,0 +1,15 @@
+class_path: minerva.models.ssl.tnc.TNC
+init_args:
+  backbone: 
+    class_path: minerva.models.nets.lfr_har_architectures.HARSCnnEncoder
+    init_args:
+      dim: 2304
+      input_channel: 6
+      inner_conv_output_dim: 1280
+      permute: True
+  projection_head:
+    class_path: minerva.models.nets.tnc.Discriminator_TNC
+    init_args:
+      input_size: 2304
+      max_pool: False
+  w: 0.2

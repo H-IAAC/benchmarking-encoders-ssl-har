@@ -1,0 +1,9 @@
+override_id,data_module,view,dataset,partition,name,overrides
+multimodal_samples_001,multimodal_df,*,*,train,*,"samples_per_class=1 seed=42 batch_size=64 drop_last=False"
+multimodal_samples_005,multimodal_df,*,*,train,*,"samples_per_class=5 seed=42 batch_size=64 drop_last=False"
+multimodal_samples_010,multimodal_df,*,*,train,*,"samples_per_class=10 seed=42 batch_size=64 drop_last=False"
+multimodal_samples_025,multimodal_df,*,*,train,*,"samples_per_class=25 seed=42 batch_size=64 drop_last=False"
+multimodal_samples_050,multimodal_df,*,*,train,*,"samples_per_class=50 seed=42 batch_size=64 drop_last=False"
+multimodal_samples_100,multimodal_df,*,*,train,*,"samples_per_class=100 seed=42 batch_size=64 drop_last=False"
+multimodal_samples_200,multimodal_df,*,*,train,*,"samples_per_class=200 seed=42 batch_size=64 drop_last=False"
+multimodal_perc_100,multimodal_df,*,*,*,*,"data_percentage=1.0 seed=42 batch_size=64 drop_last=False"

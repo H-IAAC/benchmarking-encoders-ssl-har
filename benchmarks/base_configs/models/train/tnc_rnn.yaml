@@ -1,0 +1,20 @@
+class_path: minerva.models.ssl.tnc.TNC
+init_args:
+  backbone: 
+    class_path: minerva.models.nets.tnc.RnnEncoder
+    init_args:
+      hidden_size: 100
+      in_channel: 6
+      encoding_size: 320
+      cell_type: 'GRU'
+      num_layers: 1
+      dropout: 0
+      bidirectional: True
+      permute: False
+      squeeze: False
+  projection_head:
+    class_path: minerva.models.nets.tnc.Discriminator_TNC
+    init_args:
+      input_size: 320
+      max_pool: False
+  w: 0.2

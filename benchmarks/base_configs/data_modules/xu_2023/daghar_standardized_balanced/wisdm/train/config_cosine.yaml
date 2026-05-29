@@ -1,0 +1,8 @@
+class_path: minerva.data.data_modules.har_xu_23.HarDataModule
+init_args:
+  processed_data_dir: "/home/gustavo-luz/code/hiaac/paper_access_private_git/Benchmarking_Enconders_SSL/shared_data/xu_2023_datasets/1-1/wisdm/processed/"
+  window_size: 60
+  batch_size: 16
+  adf: False
+  use_train_as_val: False
+  use_val_with_train: True

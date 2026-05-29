@@ -1,0 +1,26 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+.pytest_cache/
+.ipynb_checkpoints/
+
+# Virtual envs
+.venv/
+venv/
+minerva_ssl_env/
+
+# Logs gerados pelos experimentos
+benchmarks/paper_experiments/**/logs/*
+!benchmarks/paper_experiments/**/logs/.gitkeep
+
+# Checkpoints e artefatos pesados
+*.ckpt
+*.pt
+*.pth
+*.tar.gz
+
+# OS
+.DS_Store
+Thumbs.db

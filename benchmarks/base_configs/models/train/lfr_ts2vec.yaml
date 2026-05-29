@@ -1,0 +1,35 @@
+class_path: minerva.models.ssl.lfr.LearnFromRandomnessModel
+init_args:
+  backbone:
+    class_path: minerva.models.nets.tnc.TSEncoder
+    init_args:
+      input_dims: 6
+      output_dims: 320
+      hidden_dims: 64
+      depth: 10
+      permute: True
+  projectors:
+    class_path: minerva.models.nets.lfr_har_architectures.LFR_HAR_Projector_List
+    init_args:
+      size: 60
+      encoding_size: 320
+      input_channel: 6
+      middle_dim: 544
+  predictors:
+    class_path: minerva.models.nets.lfr_har_architectures.LFR_HAR_Predictor_List
+    init_args:
+      size: 60
+      encoding_size: 320
+      middle_dim: 128
+      num_layers: 1
+  num_targets: 6
+  loss_fn: null
+  adapter:
+    class_path: minerva.models.adapters.MaxPoolingTransposingSqueezingAdapter
+    init_args:
+      kernel_size: 60
+  learning_rate: 3e-4
+  weight_decay: 3e-4
+  flatten: False
+  predictor_training_epochs: 5
+  max_backbone_training_steps: null

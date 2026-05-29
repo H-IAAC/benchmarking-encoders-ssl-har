@@ -1,0 +1,21 @@
+class_path: minerva.models.ssl.diet.DIET
+init_args:
+  backbone:
+    class_path: minerva.models.nets.tnc.TSEncoder
+    init_args:
+      input_dims: 6
+      output_dims: 320
+      hidden_dims: 64
+      depth: 10
+      permute: True
+  adapter:
+    class_path: minerva.models.adapters.MaxPoolingTransposingSqueezingAdapter
+    init_args:
+      kernel_size: 60
+  linear_head: null
+  num_data: null
+  flatten: True
+  loss: null
+  learning_rate: 3e-4
+  weight_decay: 3e-4
+  wca_scheduler_total_epochs: null

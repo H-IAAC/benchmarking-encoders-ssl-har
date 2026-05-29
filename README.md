@@ -72,7 +72,7 @@ The notebook handles checkpoint download, model instantiation, data loading, and
 
 ## Dataset: DAGHAR
 
-All models are trained and evaluated on the [**DAGHAR**](https://github.com/H-IAAC/DAGHAR) benchmark  a curated collection of smartphone-based HAR datasets with a standardized view (6 IMU channels, window size 60) enabling fair cross-dataset comparison.
+All models are trained and evaluated on the [**DAGHAR**](https://github.com/H-IAAC/DAGHAR) benchmark, a curated collection of smartphone-based HAR datasets with a standardized view (6 IMU channels, window size 60) enabling fair cross-dataset comparison.
 
 - GitHub: [https://github.com/H-IAAC/DAGHAR](https://github.com/H-IAAC/DAGHAR)
 - Zenodo: [https://zenodo.org/records/13987073](https://zenodo.org/records/13987073)
@@ -125,21 +125,12 @@ python -m pip install --upgrade pip
 ## 2. Install dependencies
 
 ```bash
-pip install -r requirements.txt
-pip uninstall pandas
-pip install pandas==2.3.3
+./install.sh
 ```
 
-This installs Minerva (`minerva==0.3.10b0`) and the packages used by the orchestration scripts under `benchmarks/scripts/` (`pandas`, `pandasql`, `networkx`, `ray`, etc.).
+This installs Minerva (`minerva==0.3.10b0`) and the packages used by the orchestration scripts under `benchmarks/scripts/` (`pandas`, `pandasql`, `networkx`, `ray`, etc.). Minerva pins an older `pandas`, so the script force-reinstalls `pandas==2.3.3` afterwards and verifies that the key imports work.
 
----
-
-## 3. Verify the installation
-
-```bash
-python -c "import minerva; print('minerva:', minerva.__version__)"
-python -c "import ray, pandasql, networkx; print('extras OK')"
-```
+Run it inside the virtual environment created in step 1.
 
 ---
 
@@ -149,7 +140,7 @@ python -c "import ray, pandasql, networkx; print('extras OK')"
   ```bash
   ray start --head --port=6379
   ```
-- **GPU**: to run pretraining/finetuning you'll need a GPU compatible with the PyTorch version shipped with Minerva. If you have trouble with pytorch you can uninstall and install specific wheels (e.g `pip install --index-url https://download.pytorch.org/whl/cu121`       torch torchvision )
+- **GPU**: to run pretraining/finetuning you'll need a GPU compatible with the PyTorch version shipped with Minerva. If you have trouble with PyTorch, you can uninstall it and install specific wheels, e.g. `pip install --index-url https://download.pytorch.org/whl/cu121 torch torchvision`.
 - **Docker / VSCode dev container**: a ready-to-use alternative is documented in [`set_docker.md`](set_docker.md).
 
 
@@ -181,19 +172,21 @@ Full step-by-step instructions to also replicate the entire pre-training pipelin
 
 ```
 benchmarking-encoders-ssl-har/
+├── README.md
 ├── requirements.txt
-└── benchmarks/
-    ├── scripts/              ← planner, submitter, summarizer (see scripts/README.md)
-    ├── base_configs/         ← base YAML configs (data_modules / models / pipelines)
-    └── paper_experiments/
-        ├── to_be_validated/  ← ALL paper experiments (static catalog)
-        ├── validation_run/   ← currently running (work area)
-        └── validated/        ← finished
-    ├── paper_results/         ← analysis of the results presented in the paper
-├── download_data.sh
+├── install.sh                    ← installs dependencies
+├── download_data.sh              ← downloads & prepares all datasets
 ├── prepare_data.py
-├── set_docker.md
-├── ssl_har_model_zoo.ipynb
+├── set_docker.md                 ← Docker / VSCode dev container guide
+├── ssl_har_model_zoo.ipynb       ← interactive model zoo notebook
+└── benchmarks/
+    ├── scripts/                  ← planner, submitter, summarizer
+    ├── base_configs/             ← base YAML configs (data_modules / models / pipelines)
+    ├── paper_experiments/
+    │   ├── to_be_validated/      ← ALL paper experiments (static catalog)
+    │   ├── validation_run/       ← currently running (work area)
+    │   └── validated/            ← finished
+    └── paper_results/            ← analysis of the results presented in the paper
 ```
 
 The lifecycle is: copy from `to_be_validated/` → run in `validation_run/` → move to `validated/`. See **[`benchmarks/paper_experiments/README.md`](benchmarks/paper_experiments/README.md)** for details on how to run and analyse results.

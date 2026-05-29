@@ -1,3 +1,2 @@
 override_id,task,name,overrides
 train_for_100_epochs,har,*,max_epochs=100
-train_for_600_epochs,har,train_without_early_stopping,max_epochs=600

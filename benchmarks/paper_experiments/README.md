@@ -5,13 +5,13 @@ This directory contains all experiment configurations used to produce the result
 > **Benchmarking Encoders and Self-Supervised Learning for Smartphone-Based Human Activity Recognition**
 > da Luz et al., IEEE Access 2026
 
-Each subdirectory under `to_be_validated/` is a self-contained experiment with its `experiments.csv` and overrides. The lifecycle (`to_be_validated/` → `validation_run/` → `validated/`) is documented in [`README.md`](README.md).
+Each subdirectory under `to_be_validated/` is a self-contained experiment with its `experiments.csv` and overrides. The lifecycle (`to_be_validated/` → `validation_run/` → `validated/`) is documented here.
 
 ---
 
 ## Prerequisites
 
-**1. Setup from the root directory**: see **[../../INSTALL.md](../../INSTALL.md)** for the Minerva install. If you prefer a Docker dev container, follow **[../../set_docker.md](../../set_docker.md)** instead.
+**1. Setup from the root directory**: follow the install instructions in the **[root README](../../README.md)** (run `./install.sh` to install Minerva and the orchestration dependencies). If you prefer a Docker dev container, follow **[../../set_docker.md](../../set_docker.md)** instead.
 
 **2. Update config paths**
 
@@ -20,12 +20,6 @@ The YAML files under `base_configs/` contain absolute `data_path` values. After 
 ```bash
 cd benchmarks
 python scripts/update_config_paths.py
-```
-
-Preview without writing:
-
-```bash
-python scripts/update_config_paths.py --dry-run
 ```
 
 This only rewrites the host-specific prefix before `shared_data/` in the affected YAML files. Dataset suffixes are never touched.
@@ -118,7 +112,7 @@ Copy and run (from the `benchmarks/` directory):
 ```bash
 # pick one experiment from the catalog
 cp -r paper_experiments/to_be_validated/tnc/tnc_rnn_run1 \
-      paper_experiments/validation_run/tnc/tnc_rnn
+      paper_experiments/validation_run/tnc/tnc_rnn_run1
 
 # plan + run + summarize (loop over validation_run)
 BASE_CONFIGS_PATH="$(pwd)/base_configs"
@@ -146,9 +140,9 @@ for run_dir in paper_experiments/validation_run/*/*; do
 done
 
 # promote what has been validated
-mv paper_experiments/validation_run/tnc/tnc_rnn \
-   paper_experiments/validated/tnc/tnc_rnn
-mv saved_metrics_tnc_rnn.csv paper_experiments/validated/tnc/tnc_rnn/
+mv paper_experiments/validation_run/tnc/tnc_rnn_run1 \
+   paper_experiments/validated/tnc/tnc_rnn_run1
+mv saved_metrics_tnc_rnn_run1.csv paper_experiments/validated/tnc/tnc_rnn_run1/
 ```
 
 ---

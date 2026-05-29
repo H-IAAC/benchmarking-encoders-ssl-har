@@ -1,0 +1,20 @@
+# Minerva (main ML framework)
+minerva==0.3.10b0
+
+# =============================================================================
+# Extra dependencies used by the orchestration scripts in benchmarks/scripts
+# =============================================================================
+pandas==2.3.3
+numpy==1.26.4
+PyYAML==6.0.3
+tqdm==4.67.3
+kaleido==0.2.1
+
+# Execution planning (execution_planner.py)
+pandasql==0.7.3
+networkx==3.6.1
+graphviz==0.21
+
+# Distributed execution (submit_it.py)
+ray[default]==2.55.1
+sqlitedict==2.1.0

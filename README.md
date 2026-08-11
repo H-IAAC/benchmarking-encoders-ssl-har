@@ -84,19 +84,10 @@ under `~/.cache/torch/hub`.
 | [`ssl_har_model_zoo.ipynb`](ssl_har_model_zoo.ipynb) | Browse the catalog, load a model, run inference, reproduce a published accuracy and start a fine-tuning |
 | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://drive.google.com/file/d/1hkGDU7vvgxIAqHw9GDIwZiPlidb7qs2U/view?usp=sharing) | The same notebook on Colab, no local setup |
 
-### Reproducing the published accuracies
-
-`model_zoo/validate_all.py` loads every finetuned checkpoint through `torch.hub`
-and evaluates it on the test split of its own dataset:
-
-```bash
-./download_data.sh
-python model_zoo/validate_all.py
-```
-
-Compared at the one decimal Table III reports, all 36 models land within 0.1 pp
-of their published accuracy and 33 of them match it exactly. The per-model
-numbers are in [`model_zoo/validation_results.csv`](model_zoo/validation_results.csv).
+Every checkpoint in the zoo was loaded this way and evaluated on the test split
+of its own dataset: compared at the one decimal Table III reports, all 36 land
+within 0.1 pp of their published accuracy. The notebook reproduces that check
+for whichever model you select.
 
 ---
 

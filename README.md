@@ -59,14 +59,35 @@ Each combination provides:
 
 ## Quick Start
 
-The easiest way to load, evaluate, or fine-tune any of the 36 models is through the interactive notebook:
+Any of the 36 models loads in one line through `torch.hub`, with no clone and no
+setup beyond Minerva:
+
+```python
+import torch
+
+# full classifier: finetuned backbone + head, 6 activity classes
+clf = torch.hub.load("H-IAAC/benchmarking-encoders-ssl-har", "lfr_ts2vec_ms",
+                     role="finetuned", head=True, trust_repo=True)
+
+# or the SSL backbone alone, to use as a feature extractor
+backbone = torch.hub.load("H-IAAC/benchmarking-encoders-ssl-har", "lfr_ts2vec_ms",
+                          role="pretrained", trust_repo=True)
+```
+
+Model keys read `<ssl>_<encoder>_<dataset>`. List them with
+`torch.hub.list("H-IAAC/benchmarking-encoders-ssl-har", trust_repo=True)`.
+The architectures come from Minerva and the checkpoints from Zenodo, cached
+under `~/.cache/torch/hub`.
 
 | Notebook | Description |
 |----------|-------------|
-| [`ssl_har_model_zoo.ipynb`](ssl_har_model_zoo.ipynb) | Select any SSL + encoder + dataset combination from the ones available, download the checkpoint from Zenodo, and evaluate or fine-tune in a few cells |
-| [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://drive.google.com/file/d/1rIyAhPUTJhZjGPqecppAbNxfl43feei6/view?usp=sharing) | Run directly in Google Colab (no local setup required) |
+| [`ssl_har_model_zoo.ipynb`](ssl_har_model_zoo.ipynb) | Browse the catalog, load a model, run inference, reproduce a published accuracy and start a fine-tuning |
+| [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://drive.google.com/file/d/1hkGDU7vvgxIAqHw9GDIwZiPlidb7qs2U/view?usp=sharing) | The same notebook on Colab, no local setup |
 
-The notebook handles checkpoint download, model instantiation, data loading, and metric reporting automatically.
+Every checkpoint in the zoo was loaded this way and evaluated on the test split
+of its own dataset: compared at the one decimal Table III reports, all 36 land
+within 0.1 pp of their published accuracy. The notebook reproduces that check
+for whichever model you select.
 
 ---
 

@@ -71,7 +71,7 @@ models:
     dataset_name: "KuHar"
     num_classes: 6
     head_input_dim: 64
-    accuracy: 80.6   # best accuracy from the paper, Table III
+    accuracy: 80.6   # best accuracy from the paper
     weights:
       pretrained: https://zenodo.org/records/19301058/files/diet_resnetse5_kh_pretrained.ckpt
       finetuned: https://zenodo.org/records/19301058/files/diet_resnetse5_kh_finetuned.ckpt
@@ -82,7 +82,7 @@ models:
     dataset_name: "UCI-HAR"
     num_classes: 6
     head_input_dim: 64
-    accuracy: 95.9   # best accuracy from the paper, Table III
+    accuracy: 95.9   # best accuracy from the paper
     weights:
       pretrained: https://zenodo.org/records/19301058/files/diet_resnetse5_uci_pretrained.ckpt
       finetuned: https://zenodo.org/records/19301058/files/diet_resnetse5_uci_finetuned.ckpt
@@ -93,7 +93,7 @@ models:
     dataset_name: "KuHar"
     num_classes: 6
     head_input_dim: 64
-    accuracy: 77.1   # best accuracy from the paper, Table III
+    accuracy: 77.1   # best accuracy from the paper
     weights:
       pretrained: https://zenodo.org/records/19301058/files/lfr_imutransformer_kh_pretrained.ckpt
       finetuned: https://zenodo.org/records/19301058/files/lfr_imutransformer_kh_finetuned.ckpt
@@ -104,7 +104,7 @@ models:
     dataset_name: "RealWorld Thigh"
     num_classes: 6
     head_input_dim: 64
-    accuracy: 72.2   # best accuracy from the paper, Table III
+    accuracy: 72.2   # best accuracy from the paper
     weights:
       pretrained: https://zenodo.org/records/19301058/files/lfr_imutransformer_rwthigh_pretrained.ckpt
       finetuned: https://zenodo.org/records/19301058/files/lfr_imutransformer_rwthigh_finetuned.ckpt
@@ -115,7 +115,7 @@ models:
     dataset_name: "RealWorld Waist"
     num_classes: 6
     head_input_dim: 64
-    accuracy: 80.1   # best accuracy from the paper, Table III
+    accuracy: 80.1   # best accuracy from the paper
     weights:
       pretrained: https://zenodo.org/records/19301058/files/lfr_imutransformer_rwwaist_pretrained.ckpt
       finetuned: https://zenodo.org/records/19301058/files/lfr_imutransformer_rwwaist_finetuned.ckpt
@@ -126,7 +126,7 @@ models:
     dataset_name: "MotionSense"
     num_classes: 6
     head_input_dim: 64
-    accuracy: 93.8   # best accuracy from the paper, Table III
+    accuracy: 93.8   # best accuracy from the paper
     weights:
       pretrained: https://zenodo.org/records/19301058/files/lfr_resnetse5_ms_pretrained.ckpt
       finetuned: https://zenodo.org/records/19301058/files/lfr_resnetse5_ms_finetuned.ckpt
@@ -137,7 +137,7 @@ models:
     dataset_name: "MotionSense"
     num_classes: 6
     head_input_dim: 320
-    accuracy: 97.5   # best accuracy from the paper, Table III
+    accuracy: 97.5   # best accuracy from the paper
     weights:
       pretrained: https://zenodo.org/records/19301058/files/lfr_ts2vec_ms_pretrained.ckpt
       finetuned: https://zenodo.org/records/19301058/files/lfr_ts2vec_ms_finetuned.ckpt
@@ -148,7 +148,7 @@ models:
     dataset_name: "MotionSense"
     num_classes: 6
     head_input_dim: 2304
-    accuracy: 92.8   # best accuracy from the paper, Table III
+    accuracy: 92.8   # best accuracy from the paper
     weights:
       pretrained: https://zenodo.org/records/19301058/files/lfr_tstcc_ms_pretrained.ckpt
       finetuned: https://zenodo.org/records/19301058/files/lfr_tstcc_ms_finetuned.ckpt
@@ -159,7 +159,7 @@ models:
     dataset_name: "RealWorld Thigh"
     num_classes: 6
     head_input_dim: 2304
-    accuracy: 74.9   # best accuracy from the paper, Table III
+    accuracy: 74.9   # best accuracy from the paper
     weights:
       pretrained: https://zenodo.org/records/19301058/files/lfr_tstcc_rwthigh_pretrained.ckpt
       finetuned: https://zenodo.org/records/19301058/files/lfr_tstcc_rwthigh_finetuned.ckpt
@@ -170,7 +170,7 @@ models:
     dataset_name: "KuHar"
     num_classes: 6
     head_input_dim: 256
-    accuracy: 81.2   # best accuracy from the paper, Table III
+    accuracy: 81.2   # best accuracy from the paper
     weights:
       pretrained: https://zenodo.org/records/19301058/files/tfc_cnnpff_kh_pretrained.ckpt
       finetuned: https://zenodo.org/records/19301058/files/tfc_cnnpff_kh_finetuned.ckpt
@@ -181,7 +181,7 @@ models:
     dataset_name: "MotionSense"
     num_classes: 6
     head_input_dim: 256
-    accuracy: 95.0   # best accuracy from the paper, Table III
+    accuracy: 95.0   # best accuracy from the paper
     weights:
       pretrained: https://zenodo.org/records/19301058/files/tfc_cnnpff_ms_pretrained.ckpt
       finetuned: https://zenodo.org/records/19301058/files/tfc_cnnpff_ms_finetuned.ckpt
@@ -192,7 +192,7 @@ models:
     dataset_name: "RealWorld Thigh"
     num_classes: 6
     head_input_dim: 256
-    accuracy: 81.5   # best accuracy from the paper, Table III
+    accuracy: 81.5   # best accuracy from the paper
     weights:
       pretrained: https://zenodo.org/records/19301058/files/tfc_cnnpff_rwthigh_pretrained.ckpt
       finetuned: https://zenodo.org/records/19301058/files/tfc_cnnpff_rwthigh_finetuned.ckpt
@@ -203,7 +203,7 @@ models:
     dataset_name: "RealWorld Waist"
     num_classes: 6
     head_input_dim: 256
-    accuracy: 81.8   # best accuracy from the paper, Table III
+    accuracy: 81.8   # best accuracy from the paper
     weights:
       pretrained: https://zenodo.org/records/19301058/files/tfc_cnnpff_rwwaist_pretrained.ckpt
       finetuned: https://zenodo.org/records/19301058/files/tfc_cnnpff_rwwaist_finetuned.ckpt
@@ -214,7 +214,7 @@ models:
     dataset_name: "UCI-HAR"
     num_classes: 6
     head_input_dim: 256
-    accuracy: 96.2   # best accuracy from the paper, Table III
+    accuracy: 96.2   # best accuracy from the paper
     weights:
       pretrained: https://zenodo.org/records/19301058/files/tfc_cnnpff_uci_pretrained.ckpt
       finetuned: https://zenodo.org/records/19301058/files/tfc_cnnpff_uci_finetuned.ckpt
@@ -225,7 +225,7 @@ models:
     dataset_name: "WISDM"
     num_classes: 6
     head_input_dim: 256
-    accuracy: 91.2   # best accuracy from the paper, Table III
+    accuracy: 91.2   # best accuracy from the paper
     weights:
       pretrained: https://zenodo.org/records/19301058/files/tfc_cnnpff_wisdm_pretrained.ckpt
       finetuned: https://zenodo.org/records/19301058/files/tfc_cnnpff_wisdm_finetuned.ckpt
@@ -236,7 +236,7 @@ models:
     dataset_name: "MotionSense"
     num_classes: 6
     head_input_dim: 256
-    accuracy: 89.7   # best accuracy from the paper, Table III
+    accuracy: 89.7   # best accuracy from the paper
     weights:
       pretrained: https://zenodo.org/records/19301058/files/tfc_imutransformer_ms_pretrained.ckpt
       finetuned: https://zenodo.org/records/19301058/files/tfc_imutransformer_ms_finetuned.ckpt
@@ -247,7 +247,7 @@ models:
     dataset_name: "UCI-HAR"
     num_classes: 6
     head_input_dim: 256
-    accuracy: 92.3   # best accuracy from the paper, Table III
+    accuracy: 92.3   # best accuracy from the paper
     weights:
       pretrained: https://zenodo.org/records/19301058/files/tfc_imutransformer_uci_pretrained.ckpt
       finetuned: https://zenodo.org/records/19301058/files/tfc_imutransformer_uci_finetuned.ckpt
@@ -258,7 +258,7 @@ models:
     dataset_name: "WISDM"
     num_classes: 6
     head_input_dim: 256
-    accuracy: 89.2   # best accuracy from the paper, Table III
+    accuracy: 89.2   # best accuracy from the paper
     weights:
       pretrained: https://zenodo.org/records/19301058/files/tfc_imutransformer_wisdm_pretrained.ckpt
       finetuned: https://zenodo.org/records/19301058/files/tfc_imutransformer_wisdm_finetuned.ckpt
@@ -269,7 +269,7 @@ models:
     dataset_name: "RealWorld Thigh"
     num_classes: 6
     head_input_dim: 256
-    accuracy: 82.8   # best accuracy from the paper, Table III
+    accuracy: 82.8   # best accuracy from the paper
     weights:
       pretrained: https://zenodo.org/records/19301058/files/tfc_resnetse5_rwthigh_pretrained.ckpt
       finetuned: https://zenodo.org/records/19301058/files/tfc_resnetse5_rwthigh_finetuned.ckpt
@@ -280,7 +280,7 @@ models:
     dataset_name: "RealWorld Waist"
     num_classes: 6
     head_input_dim: 256
-    accuracy: 79.2   # best accuracy from the paper, Table III
+    accuracy: 79.2   # best accuracy from the paper
     weights:
       pretrained: https://zenodo.org/records/19301058/files/tfc_resnetse5_rwwaist_pretrained.ckpt
       finetuned: https://zenodo.org/records/19301058/files/tfc_resnetse5_rwwaist_finetuned.ckpt
@@ -291,7 +291,7 @@ models:
     dataset_name: "WISDM"
     num_classes: 6
     head_input_dim: 256
-    accuracy: 86.9   # best accuracy from the paper, Table III
+    accuracy: 86.9   # best accuracy from the paper
     weights:
       pretrained: https://zenodo.org/records/19301058/files/tfc_resnetse5_wisdm_pretrained.ckpt
       finetuned: https://zenodo.org/records/19301058/files/tfc_resnetse5_wisdm_finetuned.ckpt
@@ -302,7 +302,7 @@ models:
     dataset_name: "KuHar"
     num_classes: 6
     head_input_dim: 256
-    accuracy: 74.3   # best accuracy from the paper, Table III
+    accuracy: 74.3   # best accuracy from the paper
     weights:
       pretrained: https://zenodo.org/records/19301058/files/tfc_rnn_kh_pretrained.ckpt
       finetuned: https://zenodo.org/records/19301058/files/tfc_rnn_kh_finetuned.ckpt
@@ -313,7 +313,7 @@ models:
     dataset_name: "MotionSense"
     num_classes: 6
     head_input_dim: 256
-    accuracy: 92.0   # best accuracy from the paper, Table III
+    accuracy: 92.0   # best accuracy from the paper
     weights:
       pretrained: https://zenodo.org/records/19301058/files/tfc_rnn_ms_pretrained.ckpt
       finetuned: https://zenodo.org/records/19301058/files/tfc_rnn_ms_finetuned.ckpt
@@ -324,7 +324,7 @@ models:
     dataset_name: "RealWorld Thigh"
     num_classes: 6
     head_input_dim: 256
-    accuracy: 81.0   # best accuracy from the paper, Table III
+    accuracy: 81.0   # best accuracy from the paper
     weights:
       pretrained: https://zenodo.org/records/19301058/files/tfc_rnn_rwthigh_pretrained.ckpt
       finetuned: https://zenodo.org/records/19301058/files/tfc_rnn_rwthigh_finetuned.ckpt
@@ -335,7 +335,7 @@ models:
     dataset_name: "RealWorld Waist"
     num_classes: 6
     head_input_dim: 256
-    accuracy: 82.1   # best accuracy from the paper, Table III
+    accuracy: 82.1   # best accuracy from the paper
     weights:
       pretrained: https://zenodo.org/records/19301058/files/tfc_rnn_rwwaist_pretrained.ckpt
       finetuned: https://zenodo.org/records/19301058/files/tfc_rnn_rwwaist_finetuned.ckpt
@@ -346,7 +346,7 @@ models:
     dataset_name: "UCI-HAR"
     num_classes: 6
     head_input_dim: 256
-    accuracy: 94.9   # best accuracy from the paper, Table III
+    accuracy: 94.9   # best accuracy from the paper
     weights:
       pretrained: https://zenodo.org/records/19301058/files/tfc_rnn_uci_pretrained.ckpt
       finetuned: https://zenodo.org/records/19301058/files/tfc_rnn_uci_finetuned.ckpt
@@ -357,7 +357,7 @@ models:
     dataset_name: "WISDM"
     num_classes: 6
     head_input_dim: 256
-    accuracy: 89.2   # best accuracy from the paper, Table III
+    accuracy: 89.2   # best accuracy from the paper
     weights:
       pretrained: https://zenodo.org/records/19301058/files/tfc_rnn_wisdm_pretrained.ckpt
       finetuned: https://zenodo.org/records/19301058/files/tfc_rnn_wisdm_finetuned.ckpt
@@ -368,7 +368,7 @@ models:
     dataset_name: "KuHar"
     num_classes: 6
     head_input_dim: 256
-    accuracy: 90.3   # best accuracy from the paper, Table III
+    accuracy: 90.3   # best accuracy from the paper
     weights:
       pretrained: https://zenodo.org/records/19301058/files/tfc_ts2vec_kh_pretrained.ckpt
       finetuned: https://zenodo.org/records/19301058/files/tfc_ts2vec_kh_finetuned.ckpt
@@ -379,7 +379,7 @@ models:
     dataset_name: "RealWorld Thigh"
     num_classes: 6
     head_input_dim: 256
-    accuracy: 81.2   # best accuracy from the paper, Table III
+    accuracy: 81.2   # best accuracy from the paper
     weights:
       pretrained: https://zenodo.org/records/19301058/files/tfc_ts2vec_rwthigh_pretrained.ckpt
       finetuned: https://zenodo.org/records/19301058/files/tfc_ts2vec_rwthigh_finetuned.ckpt
@@ -390,7 +390,7 @@ models:
     dataset_name: "RealWorld Waist"
     num_classes: 6
     head_input_dim: 256
-    accuracy: 82.5   # best accuracy from the paper, Table III
+    accuracy: 82.5   # best accuracy from the paper
     weights:
       pretrained: https://zenodo.org/records/19301058/files/tfc_ts2vec_rwwaist_pretrained.ckpt
       finetuned: https://zenodo.org/records/19301058/files/tfc_ts2vec_rwwaist_finetuned.ckpt
@@ -401,7 +401,7 @@ models:
     dataset_name: "UCI-HAR"
     num_classes: 6
     head_input_dim: 256
-    accuracy: 96.1   # best accuracy from the paper, Table III
+    accuracy: 96.1   # best accuracy from the paper
     weights:
       pretrained: https://zenodo.org/records/19301058/files/tfc_ts2vec_uci_pretrained.ckpt
       finetuned: https://zenodo.org/records/19301058/files/tfc_ts2vec_uci_finetuned.ckpt
@@ -412,7 +412,7 @@ models:
     dataset_name: "WISDM"
     num_classes: 6
     head_input_dim: 256
-    accuracy: 90.7   # best accuracy from the paper, Table III
+    accuracy: 90.7   # best accuracy from the paper
     weights:
       pretrained: https://zenodo.org/records/19301058/files/tfc_ts2vec_wisdm_pretrained.ckpt
       finetuned: https://zenodo.org/records/19301058/files/tfc_ts2vec_wisdm_finetuned.ckpt
@@ -423,7 +423,7 @@ models:
     dataset_name: "KuHar"
     num_classes: 6
     head_input_dim: 256
-    accuracy: 73.6   # best accuracy from the paper, Table III
+    accuracy: 73.6   # best accuracy from the paper
     weights:
       pretrained: https://zenodo.org/records/19301058/files/tfc_tstcc_kh_pretrained.ckpt
       finetuned: https://zenodo.org/records/19301058/files/tfc_tstcc_kh_finetuned.ckpt
@@ -434,7 +434,7 @@ models:
     dataset_name: "RealWorld Waist"
     num_classes: 6
     head_input_dim: 256
-    accuracy: 76.5   # best accuracy from the paper, Table III
+    accuracy: 76.5   # best accuracy from the paper
     weights:
       pretrained: https://zenodo.org/records/19301058/files/tfc_tstcc_rwwaist_pretrained.ckpt
       finetuned: https://zenodo.org/records/19301058/files/tfc_tstcc_rwwaist_finetuned.ckpt
@@ -445,7 +445,7 @@ models:
     dataset_name: "UCI-HAR"
     num_classes: 6
     head_input_dim: 256
-    accuracy: 94.3   # best accuracy from the paper, Table III
+    accuracy: 94.3   # best accuracy from the paper
     weights:
       pretrained: https://zenodo.org/records/19301058/files/tfc_tstcc_uci_pretrained.ckpt
       finetuned: https://zenodo.org/records/19301058/files/tfc_tstcc_uci_finetuned.ckpt
@@ -456,7 +456,7 @@ models:
     dataset_name: "WISDM"
     num_classes: 6
     head_input_dim: 256
-    accuracy: 88.9   # best accuracy from the paper, Table III
+    accuracy: 88.9   # best accuracy from the paper
     weights:
       pretrained: https://zenodo.org/records/19301058/files/tfc_tstcc_wisdm_pretrained.ckpt
       finetuned: https://zenodo.org/records/19301058/files/tfc_tstcc_wisdm_finetuned.ckpt

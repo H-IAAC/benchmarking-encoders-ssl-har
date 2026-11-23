@@ -1,0 +1,2793 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Benchmark Analysis Tool — H.IAAC</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,300;0,400;0,600;0,700;1,400&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.1/dist/chart.umd.min.js"></script>
+    <style>
+        :root {
+            --orange: #F5A623;
+            --orange-dark: #D4880C;
+            --orange-light: #FDE8BC;
+            --orange-dim: rgba(245, 166, 35, 0.12);
+            --purple: #7B5EA7;
+            --purple-dark: #5C3D8F;
+            --purple-light: #EDE7F6;
+            --purple-dim: rgba(123, 94, 167, 0.12);
+            --ieee-blue: #006699;
+            --ieee-blue-dim: rgba(0, 102, 153, 0.10);
+            --teal: #0E8A7B;
+            --teal-dim: rgba(14, 138, 123, 0.12);
+            --teal-light: #D4F0EC;
+            --bg: #F4F3EF;
+            --surface: #FFFFFF;
+            --surface2: #F8F7F3;
+            --surface3: #EFEDE7;
+            --border: #E0DDD4;
+            --border-strong: #C5BFB0;
+            --text-primary: #1A1814;
+            --text-secondary: #4A4640;
+            --text-muted: #8A8278;
+            --radius: 8px;
+            --radius-lg: 12px;
+            --shadow: 0 1px 3px rgba(0, 0, 0, 0.08), 0 1px 2px rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.10);
+            --transition: 0.15s ease;
+        }
+
+        *,
+        *::before,
+        *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'IBM Plex Sans', sans-serif;
+            background: var(--bg);
+            color: var(--text-primary);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* ── Topbar ── */
+        .topbar {
+            position: sticky;
+            top: 0;
+            z-index: 200;
+            background: var(--purple-dark);
+            padding: 0 28px;
+            height: 52px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+        }
+
+        .topbar-logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            color: #fff;
+            letter-spacing: 0.02em;
+        }
+
+        .hiaac-badge {
+            background: var(--orange);
+            color: #fff;
+            font-weight: 700;
+            font-size: 0.75rem;
+            padding: 2px 8px;
+            border-radius: 3px;
+            letter-spacing: 0.05em;
+        }
+
+        .topbar-sep {
+            width: 1px;
+            height: 24px;
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .topbar-title {
+            flex: 1;
+            font-size: 0.78rem;
+            color: rgba(255, 255, 255, 0.65);
+            font-family: 'IBM Plex Mono', monospace;
+        }
+
+        .topbar-links {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .topbar-link {
+            font-size: 0.75rem;
+            color: rgba(255, 255, 255, 0.75);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            padding: 5px 10px;
+            border-radius: 5px;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            transition: var(--transition);
+            white-space: nowrap;
+        }
+
+        .topbar-link:hover {
+            background: rgba(255, 255, 255, 0.12);
+            color: #fff;
+            border-color: rgba(255, 255, 255, 0.3);
+        }
+
+        .topbar-link.ieee {
+            border-color: rgba(100, 180, 220, 0.4);
+            background: rgba(0, 102, 153, 0.25);
+        }
+
+        .topbar-link.ieee:hover {
+            background: rgba(0, 102, 153, 0.5);
+        }
+
+        .theme-toggle {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 5px 10px;
+            border-radius: 5px;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            background: transparent;
+            color: rgba(255, 255, 255, 0.75);
+            font-size: 0.75rem;
+            font-family: 'IBM Plex Sans', sans-serif;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .theme-toggle:hover {
+            background: rgba(255, 255, 255, 0.12);
+            color: #fff;
+        }
+
+        .theme-icon {
+            transition: transform 0.4s ease;
+        }
+
+        [data-theme="dark"] .theme-icon {
+            transform: rotate(180deg);
+        }
+
+        /* ── Layout ── */
+        .app-layout {
+            display: grid;
+            grid-template-columns: 268px 1fr;
+            flex: 1;
+            min-height: calc(100vh - 52px);
+        }
+
+        /* ── Sidebar ── */
+        .sidebar {
+            background: var(--surface);
+            border-right: 1px solid var(--border);
+            padding: 20px 0 24px;
+            overflow-y: auto;
+            position: sticky;
+            top: 52px;
+            height: calc(100vh - 52px);
+        }
+
+        .sidebar-section {
+            padding: 0 16px;
+            margin-bottom: 20px;
+        }
+
+        .sidebar-label {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 0.62rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            padding: 0 0 8px 2px;
+            border-bottom: 1px solid var(--border);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .filter-chip-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+        }
+
+        .filter-chip {
+            font-size: 0.73rem;
+            padding: 4px 10px;
+            border-radius: 4px;
+            border: 1px solid var(--border);
+            background: var(--surface2);
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .filter-chip:hover {
+            border-color: var(--orange);
+            color: var(--orange-dark);
+            background: var(--orange-dim);
+        }
+
+        .filter-chip.active {
+            background: var(--orange);
+            border-color: var(--orange-dark);
+            color: #fff;
+            font-weight: 600;
+        }
+
+        .active-pills {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            min-height: 36px;
+        }
+
+        .active-pill-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 4px;
+            align-items: center;
+        }
+
+        .active-pill-type {
+            font-size: 0.62rem;
+            font-family: 'IBM Plex Mono', monospace;
+            color: var(--text-muted);
+            min-width: 58px;
+            letter-spacing: 0.04em;
+        }
+
+        .pill {
+            font-size: 0.7rem;
+            padding: 2px 7px;
+            border-radius: 3px;
+            background: var(--purple-light);
+            border: 1px solid rgba(123, 94, 167, 0.25);
+            color: var(--purple-dark);
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .pill .remove-pill {
+            cursor: pointer;
+            opacity: 0.5;
+            transition: var(--transition);
+        }
+
+        .pill .remove-pill:hover {
+            opacity: 1;
+        }
+
+        .empty-pills {
+            font-size: 0.73rem;
+            color: var(--text-muted);
+            font-style: italic;
+        }
+
+        .sidebar-actions {
+            padding: 0 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 7px;
+        }
+
+        .sidebar-divider {
+            height: 1px;
+            background: var(--border);
+            margin: 4px 0;
+        }
+
+        /* ── Buttons ── */
+        .btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 7px;
+            padding: 9px 14px;
+            border-radius: var(--radius);
+            border: none;
+            font-size: 0.8rem;
+            font-weight: 500;
+            font-family: 'IBM Plex Sans', sans-serif;
+            cursor: pointer;
+            transition: var(--transition);
+            width: 100%;
+        }
+
+        .btn-primary {
+            background: var(--orange);
+            color: #fff;
+        }
+
+        .btn-primary:hover {
+            background: var(--orange-dark);
+        }
+
+        .btn-secondary {
+            background: var(--purple);
+            color: #fff;
+        }
+
+        .btn-secondary:hover {
+            background: var(--purple-dark);
+        }
+
+        .btn-ghost {
+            background: var(--surface2);
+            color: var(--text-secondary);
+            border: 1px solid var(--border);
+        }
+
+        .btn-ghost:hover {
+            background: var(--surface3);
+            color: var(--text-primary);
+            border-color: var(--border-strong);
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: var(--ieee-blue);
+            border: 1px solid rgba(0, 102, 153, 0.3);
+        }
+
+        .btn-outline:hover {
+            background: var(--ieee-blue-dim);
+        }
+
+        /* ── Main ── */
+        .main-content {
+            padding: 24px 28px;
+            overflow-x: hidden;
+        }
+
+        /* ── Paper Banner ── */
+        .paper-banner {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            margin-bottom: 20px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+        }
+
+        .paper-banner-top {
+            background: linear-gradient(135deg, var(--purple-dark) 0%, var(--purple) 60%, #9B6CC0 100%);
+            padding: 20px 24px 18px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .paper-banner-top::after {
+            content: '';
+            position: absolute;
+            right: -30px;
+            top: -30px;
+            width: 160px;
+            height: 160px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .paper-banner-eyebrow {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 0.65rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: rgba(255, 255, 255, 0.6);
+            margin-bottom: 8px;
+        }
+
+        .paper-banner-title {
+            font-family: 'Source Serif 4', serif;
+            font-weight: 600;
+            font-size: 1.15rem;
+            color: #fff;
+            line-height: 1.4;
+            margin-bottom: 10px;
+            max-width: 640px;
+        }
+
+        .paper-banner-authors {
+            font-size: 0.75rem;
+            color: rgba(255, 255, 255, 0.7);
+            line-height: 1.5;
+        }
+
+        .paper-banner-authors strong {
+            color: rgba(255, 255, 255, 0.9);
+            font-weight: 500;
+        }
+
+        .paper-banner-bottom {
+            padding: 14px 24px;
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .paper-banner-desc {
+            font-size: 0.82rem;
+            color: var(--text-secondary);
+            line-height: 1.6;
+            max-width: 640px;
+        }
+
+        .paper-badges {
+            display: flex;
+            gap: 8px;
+            align-items: flex-start;
+            flex-wrap: wrap;
+            flex-shrink: 0;
+        }
+
+        .paper-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            padding: 5px 11px;
+            border-radius: 4px;
+            font-size: 0.72rem;
+            font-weight: 500;
+            text-decoration: none;
+            transition: var(--transition);
+            white-space: nowrap;
+        }
+
+        .paper-badge.ieee {
+            background: #c8e6f5;
+            color: var(--ieee-blue);
+            border: 1px solid rgba(0, 102, 153, 0.25);
+        }
+
+        .paper-badge.ieee:hover {
+            background: #a8d4ed;
+        }
+
+        .paper-badge.github {
+            background: var(--surface3);
+            color: var(--text-primary);
+            border: 1px solid var(--border);
+        }
+
+        .paper-badge.github:hover {
+            background: var(--border);
+        }
+
+        /* ── Stats ── */
+        .stats-row {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .stat-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 14px 16px;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: var(--border);
+        }
+
+        .stat-card.acc-orange::before {
+            background: var(--orange);
+        }
+
+        .stat-card.acc-purple::before {
+            background: var(--purple);
+        }
+
+        .stat-card.acc-blue::before {
+            background: var(--ieee-blue);
+        }
+
+        .stat-card.acc-green::before {
+            background: #2E8B57;
+        }
+
+        .stat-card.acc-teal::before {
+            background: var(--teal);
+        }
+
+        .stat-card:hover {
+            border-color: var(--border-strong);
+            box-shadow: var(--shadow-md);
+        }
+
+        .stat-label {
+            font-size: 0.65rem;
+            font-family: 'IBM Plex Mono', monospace;
+            color: var(--text-muted);
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            margin-bottom: 5px;
+        }
+
+        .stat-value {
+            font-family: 'Source Serif 4', serif;
+            font-weight: 700;
+            font-size: 1.5rem;
+            color: var(--text-primary);
+            line-height: 1;
+        }
+
+        .stat-value.orange {
+            color: var(--orange-dark);
+        }
+
+        .stat-value.purple {
+            color: var(--purple);
+        }
+
+        .stat-value.blue {
+            color: var(--ieee-blue);
+        }
+
+        .stat-value.green {
+            color: #2E8B57;
+        }
+
+        .stat-value.teal {
+            color: var(--teal);
+        }
+
+        .stat-sub {
+            font-size: 0.68rem;
+            color: var(--text-muted);
+            margin-top: 4px;
+            line-height: 1.3;
+        }
+
+        /* ── Tabs ── */
+        .tab-bar {
+            display: flex;
+            gap: 2px;
+            margin-bottom: 18px;
+            border-bottom: 2px solid var(--border);
+        }
+
+        .tab-btn {
+            padding: 8px 16px;
+            border: none;
+            background: transparent;
+            color: var(--text-muted);
+            font-size: 0.8rem;
+            font-weight: 500;
+            font-family: 'IBM Plex Sans', sans-serif;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            border-bottom: 2px solid transparent;
+            margin-bottom: -2px;
+        }
+
+        .tab-btn.active {
+            color: var(--purple-dark);
+            border-bottom-color: var(--purple);
+            font-weight: 600;
+        }
+
+        .tab-btn:hover:not(.active) {
+            color: var(--text-secondary);
+        }
+
+        /* ── Card ── */
+        .card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            margin-bottom: 18px;
+            box-shadow: var(--shadow);
+        }
+
+        .card-header {
+            padding: 14px 20px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            background: var(--surface2);
+        }
+
+        .card-title {
+            font-family: 'IBM Plex Sans', sans-serif;
+            font-size: 0.88rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .card-title i {
+            color: var(--purple);
+            font-size: 0.85rem;
+        }
+
+        .toggle-group {
+            display: flex;
+            gap: 2px;
+            background: var(--surface3);
+            border-radius: 5px;
+            padding: 2px;
+            border: 1px solid var(--border);
+        }
+
+        .toggle-btn {
+            padding: 4px 10px;
+            border-radius: 4px;
+            border: none;
+            background: transparent;
+            color: var(--text-muted);
+            font-size: 0.72rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+            font-family: 'IBM Plex Sans', sans-serif;
+        }
+
+        .toggle-btn.active {
+            background: var(--surface);
+            color: var(--purple-dark);
+            font-weight: 600;
+            box-shadow: var(--shadow);
+        }
+
+        .count-badge {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 0.68rem;
+            padding: 2px 8px;
+            border-radius: 10px;
+            background: var(--surface3);
+            border: 1px solid var(--border);
+            color: var(--text-muted);
+        }
+
+        .count-badge.teal {
+            background: var(--teal-light);
+            border-color: rgba(14, 138, 123, 0.25);
+            color: var(--teal);
+        }
+
+        /* ── Chart ── */
+        .chart-wrap {
+            position: relative;
+            height: 420px;
+            padding: 16px 20px;
+        }
+
+        .chart-controls {
+            display: flex;
+            gap: 6px;
+            padding: 10px 20px;
+            border-top: 1px solid var(--border);
+            background: var(--surface2);
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .chart-controls-sep {
+            width: 1px;
+            height: 20px;
+            background: var(--border);
+            margin: 0 2px;
+        }
+
+        .icon-btn {
+            padding: 5px 10px;
+            border-radius: 5px;
+            border: 1px solid var(--border);
+            background: var(--surface);
+            color: var(--text-muted);
+            font-size: 0.72rem;
+            cursor: pointer;
+            transition: var(--transition);
+            font-family: 'IBM Plex Mono', monospace;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .icon-btn:hover {
+            color: var(--text-primary);
+            border-color: var(--border-strong);
+            background: var(--surface3);
+        }
+
+        .icon-btn.teal {
+            color: var(--teal);
+            border-color: rgba(14, 138, 123, 0.3);
+            background: var(--teal-dim);
+        }
+
+        .icon-btn.teal:hover {
+            background: rgba(14, 138, 123, 0.22);
+            border-color: var(--teal);
+        }
+
+        /* ── Legend ── */
+        .legend-wrap {
+            padding: 12px 20px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+            border-top: 1px solid var(--border);
+            max-height: 150px;
+            overflow-y: auto;
+            background: var(--surface2);
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 3px 8px;
+            border-radius: 3px;
+            cursor: pointer;
+            border: 1px solid transparent;
+            transition: var(--transition);
+            font-size: 0.71rem;
+            color: var(--text-secondary);
+        }
+
+        .legend-item:hover {
+            background: var(--surface3);
+            border-color: var(--border);
+            color: var(--text-primary);
+        }
+
+        .legend-item.faded {
+            opacity: 0.28;
+        }
+
+        .legend-item.csv-item {
+            border-color: rgba(14, 138, 123, 0.2);
+            background: rgba(14, 138, 123, 0.05);
+        }
+
+        .legend-item.csv-item:hover {
+            background: rgba(14, 138, 123, 0.12);
+            border-color: var(--teal);
+        }
+
+        .legend-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+
+        /* Source legend in chart header */
+        .source-legend {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .source-dot {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 0.68rem;
+            color: var(--text-muted);
+            font-family: 'IBM Plex Mono', monospace;
+        }
+
+        .source-dot-circle {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            display: inline-block;
+            flex-shrink: 0;
+        }
+
+        /* ── Table ── */
+        .table-wrap {
+            overflow-x: auto;
+            max-height: 520px;
+            overflow-y: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.79rem;
+        }
+
+        thead th {
+            background: var(--surface2);
+            color: var(--text-muted);
+            font-size: 0.67rem;
+            font-family: 'IBM Plex Mono', monospace;
+            letter-spacing: 0.07em;
+            text-transform: uppercase;
+            padding: 10px 12px;
+            text-align: left;
+            white-space: nowrap;
+            position: sticky;
+            top: 0;
+            border-bottom: 2px solid var(--border-strong);
+        }
+
+        tbody td {
+            padding: 9px 12px;
+            border-bottom: 1px solid var(--border);
+            color: var(--text-secondary);
+            white-space: nowrap;
+        }
+
+        tbody tr:hover td {
+            background: var(--surface2);
+            color: var(--text-primary);
+        }
+
+        tbody td:nth-child(2) {
+            font-weight: 600;
+            color: var(--text-primary);
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 0.74rem;
+        }
+
+        .best-cell {
+            color: #2E8B57 !important;
+            font-weight: 700;
+        }
+
+        .user-row td {
+            background: rgba(245, 166, 35, 0.04) !important;
+        }
+
+        .user-row td:nth-child(2)::before {
+            content: '★ ';
+            color: var(--orange);
+            font-size: 0.8em;
+        }
+
+        .csv-row td {
+            background: rgba(14, 138, 123, 0.04) !important;
+        }
+
+        .csv-row td:nth-child(2)::before {
+            content: '⬆ ';
+            color: var(--teal);
+            font-size: 0.8em;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 2px 7px;
+            border-radius: 3px;
+            font-size: 0.67rem;
+            font-family: 'IBM Plex Mono', monospace;
+        }
+
+        .badge-freeze {
+            background: var(--purple-light);
+            color: var(--purple-dark);
+            border: 1px solid rgba(123, 94, 167, 0.2);
+        }
+
+        .badge-ft {
+            background: #FFF3CD;
+            color: #856404;
+            border: 1px solid rgba(133, 100, 4, 0.2);
+        }
+
+        /* ── User / CSV Panel ── */
+        .user-panel {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            margin-bottom: 18px;
+            box-shadow: var(--shadow);
+        }
+
+        .user-panel-header {
+            padding: 14px 20px;
+            border-bottom: 1px solid transparent;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            cursor: pointer;
+            user-select: none;
+            transition: var(--transition);
+            background: var(--surface2);
+        }
+
+        .user-panel-header:hover {
+            background: var(--surface3);
+        }
+
+        .user-panel-header.open {
+            border-bottom-color: var(--border);
+        }
+
+        .user-panel-body {
+            padding: 20px;
+            display: none;
+        }
+
+        .user-panel-body.open {
+            display: block;
+        }
+
+        /* Sub-tabs inside panel */
+        .panel-tabs {
+            display: flex;
+            gap: 0;
+            margin-bottom: 20px;
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            overflow: hidden;
+        }
+
+        .panel-tab {
+            flex: 1;
+            padding: 9px 14px;
+            border: none;
+            background: var(--surface2);
+            color: var(--text-muted);
+            font-size: 0.8rem;
+            font-weight: 500;
+            font-family: 'IBM Plex Sans', sans-serif;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 7px;
+            border-right: 1px solid var(--border);
+        }
+
+        .panel-tab:last-child {
+            border-right: none;
+        }
+
+        .panel-tab.active {
+            background: var(--surface);
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+
+        .panel-tab:hover:not(.active) {
+            background: var(--surface3);
+            color: var(--text-secondary);
+        }
+
+        .panel-tab-content {
+            display: none;
+        }
+
+        .panel-tab-content.active {
+            display: block;
+        }
+
+        /* Manual form */
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 0.68rem;
+            color: var(--text-muted);
+            font-family: 'IBM Plex Mono', monospace;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            margin-bottom: 5px;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 8px 10px;
+            background: var(--surface2);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            color: var(--text-primary);
+            font-size: 0.8rem;
+            font-family: 'IBM Plex Sans', sans-serif;
+            transition: var(--transition);
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--orange);
+            background: #fff;
+        }
+
+        .form-input::placeholder {
+            color: var(--text-muted);
+        }
+
+        .perf-section-label {
+            font-size: 0.67rem;
+            color: var(--text-muted);
+            font-family: 'IBM Plex Mono', monospace;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+        }
+
+        .perf-grid {
+            display: grid;
+            grid-template-columns: repeat(8, 1fr);
+            gap: 8px;
+            margin-bottom: 16px;
+            padding: 14px;
+            background: var(--surface2);
+            border-radius: var(--radius);
+            border: 1px solid var(--border);
+        }
+
+        .perf-input-group {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .perf-label {
+            font-size: 0.65rem;
+            font-family: 'IBM Plex Mono', monospace;
+            color: var(--text-muted);
+        }
+
+        .perf-input {
+            width: 100%;
+            padding: 6px 4px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 5px;
+            color: var(--text-primary);
+            font-size: 0.78rem;
+            text-align: center;
+            font-family: 'IBM Plex Mono', monospace;
+            transition: var(--transition);
+        }
+
+        .perf-input:focus {
+            outline: none;
+            border-color: var(--orange);
+        }
+
+        /* CSV upload area */
+        .csv-drop-zone {
+            border: 2px dashed var(--border);
+            border-radius: var(--radius-lg);
+            padding: 32px 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: var(--transition);
+            background: var(--surface2);
+            position: relative;
+            margin-bottom: 16px;
+        }
+
+        .csv-drop-zone:hover,
+        .csv-drop-zone.dragging {
+            border-color: var(--teal);
+            background: var(--teal-dim);
+        }
+
+        .csv-drop-zone input[type="file"] {
+            position: absolute;
+            inset: 0;
+            opacity: 0;
+            cursor: pointer;
+            width: 100%;
+            height: 100%;
+        }
+
+        .csv-drop-icon {
+            font-size: 2rem;
+            color: var(--teal);
+            margin-bottom: 10px;
+            opacity: 0.7;
+        }
+
+        .csv-drop-title {
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: var(--text-primary);
+            margin-bottom: 4px;
+        }
+
+        .csv-drop-sub {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+
+        .csv-status {
+            display: none;
+            padding: 10px 14px;
+            border-radius: var(--radius);
+            font-size: 0.75rem;
+            font-family: 'IBM Plex Mono', monospace;
+            margin-bottom: 12px;
+            line-height: 1.5;
+        }
+
+        .csv-status.success {
+            display: block;
+            background: var(--teal-light);
+            color: var(--teal);
+            border: 1px solid rgba(14, 138, 123, 0.25);
+        }
+
+        .csv-status.error {
+            display: block;
+            background: rgba(197, 48, 48, 0.08);
+            color: #c53030;
+            border: 1px solid rgba(197, 48, 48, 0.2);
+        }
+
+        .csv-actions {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .csv-clear-btn {
+            display: none;
+        }
+
+        /* Entries list */
+        .entries-section-label {
+            font-size: 0.67rem;
+            color: var(--text-muted);
+            font-family: 'IBM Plex Mono', monospace;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+            margin-top: 20px;
+            padding-top: 16px;
+            border-top: 1px solid var(--border);
+        }
+
+        .user-data-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 14px;
+            background: var(--surface2);
+            border-radius: var(--radius);
+            border: 1px solid var(--border);
+            border-left: 3px solid var(--orange);
+            margin-bottom: 7px;
+        }
+
+        .user-data-row.csv {
+            border-left-color: var(--teal);
+        }
+
+        .user-data-meta {
+            font-size: 0.78rem;
+            color: var(--text-primary);
+        }
+
+        .user-data-meta span {
+            color: var(--text-muted);
+            font-size: 0.7rem;
+            margin-top: 2px;
+            display: block;
+        }
+
+        .user-data-actions {
+            display: flex;
+            gap: 5px;
+        }
+
+        .sm-btn {
+            padding: 4px 9px;
+            border-radius: 4px;
+            border: 1px solid var(--border);
+            background: var(--surface);
+            color: var(--text-muted);
+            font-size: 0.7rem;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .sm-btn:hover {
+            color: var(--text-primary);
+            border-color: var(--border-strong);
+        }
+
+        .sm-btn.danger:hover {
+            color: #c53030;
+            border-color: rgba(197, 48, 48, 0.3);
+        }
+
+        /* Row btn group */
+        .btn-row {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .btn-row .btn {
+            width: auto;
+            padding: 8px 18px;
+        }
+
+        /* ── Help Modal ── */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.45);
+            z-index: 500;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.2s ease;
+        }
+
+        .modal-overlay.open {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .modal {
+            background: var(--surface);
+            border-radius: var(--radius-lg);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25);
+            max-width: 660px;
+            width: 90%;
+            max-height: 82vh;
+            overflow-y: auto;
+            transform: translateY(12px);
+            transition: transform 0.2s ease;
+            border: 1px solid var(--border);
+        }
+
+        .modal-overlay.open .modal {
+            transform: translateY(0);
+        }
+
+        .modal-header {
+            padding: 18px 22px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: var(--surface2);
+            border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+        }
+
+        .modal-title {
+            font-weight: 600;
+            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .modal-title i {
+            color: var(--teal);
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            font-size: 1.1rem;
+            cursor: pointer;
+            padding: 4px 7px;
+            border-radius: 4px;
+            transition: var(--transition);
+        }
+
+        .modal-close:hover {
+            background: var(--surface3);
+            color: var(--text-primary);
+        }
+
+        .modal-body {
+            padding: 22px;
+        }
+
+        .modal-section {
+            margin-bottom: 22px;
+        }
+
+        .modal-section:last-child {
+            margin-bottom: 0;
+        }
+
+        .modal-section-title {
+            font-size: 0.78rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .modal-section-title i {
+            color: var(--purple);
+            font-size: 0.75rem;
+        }
+
+        .modal-section p {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            line-height: 1.65;
+            margin-bottom: 8px;
+        }
+
+        .code-block {
+            background: var(--surface2);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 12px 14px;
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 0.73rem;
+            color: var(--text-primary);
+            line-height: 1.7;
+            overflow-x: auto;
+            margin-bottom: 8px;
+            white-space: pre;
+        }
+
+        .code-block .hdr {
+            color: var(--purple-dark);
+            font-weight: 600;
+        }
+
+        .code-block .val {
+            color: var(--teal);
+        }
+
+        .code-block .cmt {
+            color: var(--text-muted);
+        }
+
+        .field-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.77rem;
+            margin-bottom: 8px;
+        }
+
+        .field-table th {
+            background: var(--surface2);
+            padding: 7px 10px;
+            text-align: left;
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 0.65rem;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            border-bottom: 2px solid var(--border);
+        }
+
+        .field-table td {
+            padding: 7px 10px;
+            border-bottom: 1px solid var(--border);
+            color: var(--text-secondary);
+            vertical-align: top;
+        }
+
+        .field-table td:first-child {
+            font-family: 'IBM Plex Mono', monospace;
+            font-weight: 600;
+            color: var(--text-primary);
+            font-size: 0.74rem;
+        }
+
+        .field-table td code {
+            background: var(--surface3);
+            padding: 1px 5px;
+            border-radius: 3px;
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 0.72rem;
+        }
+
+        .help-tip {
+            background: var(--orange-dim);
+            border: 1px solid rgba(245, 166, 35, 0.25);
+            border-radius: 6px;
+            padding: 10px 14px;
+            font-size: 0.78rem;
+            color: var(--text-secondary);
+            line-height: 1.55;
+            display: flex;
+            gap: 10px;
+            align-items: flex-start;
+        }
+
+        .help-tip i {
+            color: var(--orange-dark);
+            margin-top: 1px;
+            flex-shrink: 0;
+        }
+
+        /* ── Misc ── */
+        .state-box {
+            text-align: center;
+            padding: 40px;
+            color: var(--text-muted);
+            font-size: 0.8rem;
+        }
+
+        .state-box i {
+            font-size: 1.8rem;
+            margin-bottom: 10px;
+            display: block;
+            opacity: 0.25;
+        }
+
+        .loading-spin {
+            display: inline-block;
+            width: 18px;
+            height: 18px;
+            border: 2px solid var(--border);
+            border-top-color: var(--orange);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        @keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(6px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .fade-in {
+            animation: fadeUp 0.22s ease both;
+        }
+
+        ::-webkit-scrollbar {
+            width: 5px;
+            height: 5px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--border-strong);
+            border-radius: 3px;
+        }
+
+        footer {
+            text-align: center;
+            padding: 14px 28px;
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            font-family: 'IBM Plex Mono', monospace;
+            letter-spacing: 0.03em;
+            border-top: 1px solid var(--border);
+            background: var(--surface);
+        }
+
+        /* ── Dark Mode ── */
+        [data-theme="dark"] {
+            --bg: #0E0E12;
+            --surface: #17171D;
+            --surface2: #1E1E26;
+            --surface3: #26262F;
+            --border: rgba(255, 255, 255, 0.08);
+            --border-strong: rgba(255, 255, 255, 0.16);
+            --text-primary: #EEEEF5;
+            --text-secondary: #9A9AAD;
+            --text-muted: #55556A;
+            --shadow: 0 1px 3px rgba(0, 0, 0, 0.4), 0 1px 2px rgba(0, 0, 0, 0.3);
+            --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.5);
+            --orange-light: rgba(245, 166, 35, 0.18);
+            --orange-dim: rgba(245, 166, 35, 0.10);
+            --purple-light: rgba(123, 94, 167, 0.22);
+            --purple-dim: rgba(123, 94, 167, 0.12);
+            --ieee-blue-dim: rgba(0, 102, 153, 0.15);
+            --teal-light: rgba(14, 138, 123, 0.2);
+            --teal-dim: rgba(14, 138, 123, 0.1);
+        }
+
+        [data-theme="dark"] .paper-badge.ieee {
+            background: rgba(0, 102, 153, 0.25);
+            color: #5BBAE8;
+            border-color: rgba(91, 186, 232, 0.2);
+        }
+
+        [data-theme="dark"] .paper-badge.github {
+            background: var(--surface3);
+            color: var(--text-primary);
+            border-color: var(--border);
+        }
+
+        [data-theme="dark"] .pill {
+            background: rgba(123, 94, 167, 0.2);
+            border-color: rgba(123, 94, 167, 0.3);
+            color: #B09DD4;
+        }
+
+        [data-theme="dark"] .badge-freeze {
+            background: rgba(123, 94, 167, 0.2);
+            color: #B09DD4;
+        }
+
+        [data-theme="dark"] .badge-ft {
+            background: rgba(245, 166, 35, 0.15);
+            color: var(--orange);
+        }
+
+        [data-theme="dark"] .btn-outline {
+            color: #5BBAE8;
+            border-color: rgba(91, 186, 232, 0.3);
+        }
+
+        [data-theme="dark"] .btn-outline:hover {
+            background: rgba(91, 186, 232, 0.1);
+        }
+
+        [data-theme="dark"] .stat-value.blue {
+            color: #5BBAE8;
+        }
+
+        [data-theme="dark"] .best-cell {
+            color: #4ADE80 !important;
+        }
+
+        [data-theme="dark"] tbody tr:hover td {
+            background: var(--surface3);
+        }
+
+        [data-theme="dark"] .user-row td {
+            background: rgba(245, 166, 35, 0.06) !important;
+        }
+
+        [data-theme="dark"] .csv-row td {
+            background: rgba(14, 138, 123, 0.06) !important;
+        }
+
+        [data-theme="dark"] .toggle-btn.active {
+            background: var(--surface3);
+            color: #B09DD4;
+        }
+
+        [data-theme="dark"] .form-input:focus {
+            background: var(--surface3);
+        }
+
+        [data-theme="dark"] .csv-status.success {
+            background: rgba(14, 138, 123, 0.18);
+            color: #3ECFBE;
+        }
+
+        [data-theme="dark"] .modal {
+            background: var(--surface);
+        }
+
+        [data-theme="dark"] .code-block {
+            background: var(--surface3);
+        }
+
+        [data-theme="dark"] .help-tip {
+            background: rgba(245, 166, 35, 0.08);
+        }
+
+        [data-theme="dark"] .panel-tab.active {
+            background: var(--surface3);
+        }
+
+        @media (max-width:1100px) {
+            .app-layout {
+                grid-template-columns: 1fr;
+            }
+
+            .sidebar {
+                position: static;
+                height: auto;
+            }
+
+            .stats-row {
+                grid-template-columns: repeat(3, 1fr);
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .perf-grid {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+
+        @media (max-width:700px) {
+            .stats-row {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .perf-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .main-content {
+                padding: 16px;
+            }
+
+            .topbar-title {
+                display: none;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- ── Help Modal ── -->
+    <div class="modal-overlay" id="help-modal">
+        <div class="modal">
+            <div class="modal-header">
+                <div class="modal-title"><i class="fas fa-file-csv"></i> CSV Upload Format Guide</div>
+                <button class="modal-close" id="help-modal-close"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="modal-body">
+
+                <div class="modal-section">
+                    <div class="modal-section-title"><i class="fas fa-info-circle"></i> Overview</div>
+                    <p>Upload a CSV file where each row represents one <strong>(technique, dataset, backbone,
+                            refinement, spc)</strong> combination. Multiple rows with the same combination are averaged
+                        automatically by the Python helper. The tool reads the mean and std to display
+                        <code>X.X ± Y.Y</code> values.
+                    </p>
+                </div>
+
+                <div class="modal-section">
+                    <div class="modal-section-title"><i class="fas fa-columns"></i> Required Columns</div>
+                    <table class="field-table">
+                        <thead>
+                            <tr>
+                                <th>Column</th>
+                                <th>Type</th>
+                                <th>Description</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>technique</td>
+                                <td>string</td>
+                                <td>SSL / supervised method name (e.g. <code>TFC</code>, <code>Diet</code>)</td>
+                            </tr>
+                            <tr>
+                                <td>dataset</td>
+                                <td>string</td>
+                                <td>Target dataset abbreviation (e.g. <code>KH</code>, <code>UCI</code>)</td>
+                            </tr>
+                            <tr>
+                                <td>backbone</td>
+                                <td>string</td>
+                                <td>Encoder name (e.g. <code>ResNet-SE-5</code>, <code>RNN</code>)</td>
+                            </tr>
+                            <tr>
+                                <td>refinement</td>
+                                <td>string</td>
+                                <td><code>freeze</code> or <code>full_finetuning</code></td>
+                            </tr>
+                            <tr>
+                                <td>spc</td>
+                                <td>integer</td>
+                                <td>Samples per class: <code>1 5 10 25 50 100 200 1000</code> (1000 = 100% dataset)</td>
+                            </tr>
+                            <tr>
+                                <td>mean</td>
+                                <td>float</td>
+                                <td>Mean accuracy in % (0–100)</td>
+                            </tr>
+                            <tr>
+                                <td>std</td>
+                                <td>float</td>
+                                <td>Std deviation in % (0–100); use 0 if single run</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="modal-section">
+                    <div class="modal-section-title"><i class="fas fa-code"></i> Example CSV</div>
+                    <div class="code-block"><span class="hdr">technique,dataset,backbone,refinement,spc,mean,std</span>
+                        <span class="val">TFC,KH,ResNet-SE-5,full_finetuning,1,41.9,2.8</span>
+                        <span class="val">TFC,KH,ResNet-SE-5,full_finetuning,5,53.7,5.3</span>
+                        <span class="val">TFC,KH,ResNet-SE-5,full_finetuning,10,51.4,9.1</span>
+                        <span class="val">TFC,KH,ResNet-SE-5,full_finetuning,25,64.4,6.8</span>
+                        <span class="val">TFC,KH,ResNet-SE-5,full_finetuning,50,65.7,0.3</span>
+                        <span class="val">TFC,KH,ResNet-SE-5,full_finetuning,100,62.7,2.0</span>
+                        <span class="val">TFC,KH,ResNet-SE-5,full_finetuning,200,66.4,0.3</span>
+                        <span class="val">TFC,KH,ResNet-SE-5,full_finetuning,1000,68.8,3.0</span>
+                        <span class="cmt"># You don't need all 8 spc values — missing ones show as N/A</span>
+                        <span class="val">MyMethod,UCI,RNN,freeze,1,55.1,1.2</span>
+                        <span class="val">MyMethod,UCI,RNN,freeze,1000,78.3,0.9</span>
+                    </div>
+                </div>
+
+                <!-- <div class="modal-section">
+                    <div class="modal-section-title"><i class="fas fa-python"></i> Python Helper (Notebook)</div>
+                    <p>If your data is a parsed experiment DataFrame, use this to export the correct CSV:</p>
+                    <div class="code-block">import pandas as pd
+
+                        def df_to_benchmark_csv(df, out_path):
+                        df = df.copy()
+                        df["frac_dtarget"] = pd.to_numeric(df["frac_dtarget"], errors="coerce")
+                        df = df[df["frac_dtarget"] > 0].dropna(subset=["frac_dtarget", "metric"])
+
+                        method_map = {"Full Finetune": "full_finetuning", "Freeze": "freeze"}
+                        df["refinement"] = df["ft_strategy"].map(method_map)
+                        df["accuracy_pct"] = df["metric"] * 100
+
+                        grouped = (
+                        df.groupby(["tsk_pretext","d_target","backbone","refinement","frac_dtarget"])
+                        .agg(mean=("accuracy_pct","mean"), std=("accuracy_pct","std"))
+                        .reset_index()
+                        )
+                        grouped["std"] = grouped["std"].fillna(0.0).round(2)
+                        grouped["mean"] = grouped["mean"].round(2)
+                        grouped["spc"] = grouped["frac_dtarget"].astype(int)
+                        grouped = grouped.rename(columns={"tsk_pretext":"technique","d_target":"dataset"})
+                        grouped[["technique","dataset","backbone","refinement","spc","mean","std"]]\
+                        .to_csv(out_path, index=False)
+
+                        df_to_benchmark_csv(df_parsed, "my_results.csv")</div>
+                </div> -->
+
+                <div class="help-tip">
+                    <i class="fas fa-lightbulb"></i>
+                    <span>Uploaded data is <strong>temporary</strong> , it lives only in memory and disappears on page
+                        reload. Use the export button to save the combined comparison as a CSV.</span>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- ── Topbar ── -->
+    <header class="topbar">
+        <div class="topbar-logo">
+            <span class="hiaac-badge">H.IAAC</span>
+            Benchmark Analysis Tool
+        </div>
+        <div class="topbar-sep"></div>
+        <div class="topbar-title">Smartphone-Based HAR · Encoder &amp; SSL Comparison</div>
+        <div class="topbar-links">
+            <a href="https://ieeexplore.ieee.org/document/11417778" target="_blank" class="topbar-link ieee">
+                <i class="fas fa-book-open"></i> IEEE Access
+            </a>
+            <a href="https://github.com/H-IAAC/benchmarking-encoders-ssl-har" target="_blank" class="topbar-link">
+                <i class="fab fa-github"></i> GitHub
+            </a>
+            <button class="theme-toggle" id="theme-toggle">
+                <i class="fas fa-moon theme-icon" id="theme-icon"></i>
+                <span id="theme-label">Dark</span>
+            </button>
+        </div>
+    </header>
+
+    <div class="app-layout">
+
+        <!-- ── Sidebar ── -->
+        <aside class="sidebar">
+            <div class="sidebar-section">
+                <div class="sidebar-label"><i class="fas fa-flask" style="color:var(--orange);font-size:0.65rem"></i>
+                    Techniques</div>
+                <div class="filter-chip-group" id="technique-buttons"></div>
+            </div>
+            <div class="sidebar-section">
+                <div class="sidebar-label"><i class="fas fa-database" style="color:var(--orange);font-size:0.65rem"></i>
+                    Datasets</div>
+                <div class="filter-chip-group" id="dataset-buttons"></div>
+            </div>
+            <div class="sidebar-section">
+                <div class="sidebar-label"><i class="fas fa-network-wired"
+                        style="color:var(--orange);font-size:0.65rem"></i> Encoders</div>
+                <div class="filter-chip-group" id="backbone-buttons"></div>
+            </div>
+            <div class="sidebar-section">
+                <div class="sidebar-label"><i class="fas fa-sliders-h"
+                        style="color:var(--orange);font-size:0.65rem"></i> Refinement</div>
+                <div class="filter-chip-group" id="method-buttons"></div>
+            </div>
+            <div class="sidebar-section">
+                <div class="sidebar-label">Active Filters</div>
+                <div class="active-pills" id="current-selections-list">
+                    <span class="empty-pills">No filters applied — showing all</span>
+                </div>
+            </div>
+            <div class="sidebar-actions">
+                <button class="btn btn-primary" id="compare-selected"><i class="fas fa-filter"></i> Apply
+                    Filters</button>
+                <button class="btn btn-ghost" id="view-selected"><i class="fas fa-eye"></i> Show All Data</button>
+                <button class="btn btn-ghost" id="clear-selections"><i class="fas fa-times"></i> Clear Filters</button>
+                <button class="btn btn-outline" id="export-data"><i class="fas fa-download"></i> Export CSV</button>
+            </div>
+        </aside>
+
+        <!-- ── Main ── -->
+        <main class="main-content">
+
+            <!-- Paper Banner -->
+            <div class="paper-banner">
+                <div class="paper-banner-top">
+                    <div class="paper-banner-eyebrow">IEEE Access · 2026 &nbsp;·&nbsp; Supplementary Material</div>
+                    <div class="paper-banner-title">Benchmarking Encoders and Self-Supervised Learning for
+                        Smartphone-Based Human Activity Recognition</div>
+                    <div class="paper-banner-authors">
+                        <strong>Gustavo P. C. P. da Luz</strong>, <strong>Darlinne H. P. Soto</strong>, <strong>Otávio
+                            O. Napoli</strong>,
+                        <strong>Anderson Rocha</strong> (Fellow, IEEE), <strong>Levy Boccato</strong>, <strong>Edson
+                            Borin</strong> (IEEE)
+                        &nbsp;·&nbsp; Hub for Artificial Intelligence and Cognitive Architectures (H.IAAC), UNICAMP,
+                        Brazil
+                    </div>
+                </div>
+                <div class="paper-banner-bottom">
+                    <div class="paper-banner-desc">
+                        Large-scale evaluation of self-supervised learning for smartphone-based HAR using the DAGHAR
+                        benchmark.
+                        <strong>11,232 models</strong> evaluated across 4 SSL techniques, 6 encoders, 2 refinement
+                        strategies, and 6 datasets.
+                    </div>
+                    <div class="paper-badges">
+                        <a href="https://ieeexplore.ieee.org/document/11417778" target="_blank"
+                            class="paper-badge ieee"><i class="fas fa-external-link-alt"></i> IEEE Xplore</a>
+                        <a href="https://github.com/H-IAAC/benchmarking-encoders-ssl-har" target="_blank"
+                            class="paper-badge github"><i class="fab fa-github"></i> GitHub</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Stats -->
+            <div class="stats-row">
+                <div class="stat-card acc-orange">
+                    <div class="stat-label">Total Records</div>
+                    <div class="stat-value orange" id="stat-total">—</div>
+                    <div class="stat-sub">in benchmark</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Currently Showing</div>
+                    <div class="stat-value" id="stat-showing">—</div>
+                    <div class="stat-sub">combinations</div>
+                </div>
+                <div class="stat-card acc-green">
+                    <div class="stat-label">Best Avg Accuracy</div>
+                    <div class="stat-value green" id="stat-best-avg">—</div>
+                    <div class="stat-sub" id="stat-best-avg-label">in current view</div>
+                </div>
+                <div class="stat-card acc-blue">
+                    <div class="stat-label">Best Max Accuracy</div>
+                    <div class="stat-value blue" id="stat-best-max">—</div>
+                    <div class="stat-sub" id="stat-best-max-label">peak across all spc</div>
+                </div>
+                <div class="stat-card acc-teal">
+                    <div class="stat-label">Uploaded Results</div>
+                    <div class="stat-value teal" id="stat-csv-count">0</div>
+                    <div class="stat-sub" id="stat-csv-label">combinations loaded</div>
+                </div>
+            </div>
+
+            <!-- Tab Bar -->
+            <div class="tab-bar">
+                <button class="tab-btn active" id="trend-view"><i class="fas fa-chart-line"></i> Performance
+                    Trends</button>
+                <button class="tab-btn" id="table-view"><i class="fas fa-table"></i> Detailed Table</button>
+            </div>
+
+            <!-- Chart Card -->
+            <div class="card" id="chart-card">
+                <div class="card-header">
+                    <div class="card-title">
+                        <i class="fas fa-chart-line"></i> Accuracy vs Samples per Class
+                        <div class="source-legend">
+                            <span class="source-dot"><span class="source-dot-circle"
+                                    style="background:var(--purple)"></span>Benchmark</span>
+                            <span class="source-dot" id="csv-legend-dot" style="display:none"><span
+                                    class="source-dot-circle" style="background:var(--teal)"></span>Uploaded CSV</span>
+                            <span class="source-dot" id="manual-legend-dot" style="display:none"><span
+                                    class="source-dot-circle" style="background:var(--orange)"></span>Manual
+                                Entry</span>
+                        </div>
+                    </div>
+                    <span class="count-badge" id="trend-count">0 curves</span>
+                </div>
+                <div class="chart-wrap">
+                    <div class="state-box" id="trend-loading"><span class="loading-spin"></span><br>Loading chart…</div>
+                    <canvas id="trend-chart" style="display:none"></canvas>
+                    <div class="state-box" id="trend-empty" style="display:none">
+                        <i class="fas fa-chart-line"></i>Select filters or load data to view trends
+                    </div>
+                </div>
+                <div class="chart-controls">
+                    <button class="icon-btn" id="show-all-curves"><i class="fas fa-eye"></i> Show all</button>
+                    <button class="icon-btn" id="hide-all-curves"><i class="fas fa-eye-slash"></i> Hide all</button>
+                    <button class="icon-btn" id="reset-curves"><i class="fas fa-redo"></i> Reset</button>
+                    <div class="chart-controls-sep"></div>
+                    <button class="icon-btn teal" id="show-csv-only" style="display:none"><i class="fas fa-upload"></i>
+                        CSV only</button>
+                    <button class="icon-btn teal" id="hide-benchmark-curves" style="display:none"><i
+                            class="fas fa-eye-slash"></i> Hide CSV</button>
+                </div>
+                <div class="legend-wrap" id="trend-legend"></div>
+            </div>
+
+            <!-- Table Card -->
+            <div class="card" id="table-card" style="display:none">
+                <div class="card-header">
+                    <div class="card-title">
+                        <i class="fas fa-table"></i> Performance Table
+                        <span
+                            style="font-size:0.7rem;color:var(--text-muted);font-weight:400;font-family:'IBM Plex Mono',monospace">
+                            — sorted by avg ↓ · best in green · ⬆ uploaded · ★ manual
+                        </span>
+                    </div>
+                    <div class="toggle-group">
+                        <button class="toggle-btn active" data-spread="compact">Compact</button>
+                        <button class="toggle-btn" data-spread="detailed">Detailed</button>
+                    </div>
+                </div>
+                <div class="table-wrap">
+                    <div class="state-box" id="table-loading"><span class="loading-spin"></span><br>Loading table…</div>
+                    <table id="performance-table" style="display:none">
+                        <thead>
+                            <tr id="table-header"></tr>
+                        </thead>
+                        <tbody id="table-body"></tbody>
+                    </table>
+                    <div class="state-box" id="table-empty" style="display:none">
+                        <i class="fas fa-table"></i>Select combinations to view table
+                    </div>
+                </div>
+            </div>
+
+            <!-- Add Your Results Panel -->
+            <div class="user-panel">
+                <div class="user-panel-header" id="user-panel-toggle">
+                    <div class="card-title">
+                        <i class="fas fa-plus-circle" style="color:var(--orange)"></i> Add Your Own Results for
+                        Comparison
+                    </div>
+                    <i class="fas fa-chevron-down" id="user-panel-chevron"
+                        style="color:var(--text-muted);transition:var(--transition)"></i>
+                </div>
+                <div class="user-panel-body" id="user-panel-body">
+
+                    <!-- Sub-tabs: Manual vs CSV -->
+                    <div class="panel-tabs">
+                        <button class="panel-tab active" data-panel="manual">
+                            <i class="fas fa-keyboard"></i> Enter Manually
+                        </button>
+                        <button class="panel-tab" data-panel="csv">
+                            <i class="fas fa-file-csv"></i> Upload CSV
+                        </button>
+                    </div>
+
+                    <!-- Manual tab -->
+                    <div class="panel-tab-content active" id="panel-manual">
+                        <div class="form-grid">
+                            <div class="form-group"><label>Technique</label><input type="text" id="user-technique"
+                                    placeholder="e.g., Your Method" class="form-input"></div>
+                            <div class="form-group"><label>Dataset</label><input type="text" id="user-dataset"
+                                    placeholder="e.g., Custom Dataset" class="form-input"></div>
+                            <div class="form-group"><label>Encoder</label><input type="text" id="user-backbone"
+                                    placeholder="e.g., Custom Encoder" class="form-input"></div>
+                            <div class="form-group"><label>Refinement</label>
+                                <select id="user-method" class="form-input">
+                                    <option value="freeze">Freeze</option>
+                                    <option value="full_finetuning">Full Finetuning</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="perf-section-label">Accuracy (%) per samples per class</div>
+                        <div class="perf-grid" id="perf-inputs"></div>
+                        <div class="btn-row" style="margin-bottom:0">
+                            <button class="btn btn-primary" id="add-user-data"><i class="fas fa-plus"></i> Add to
+                                Comparison</button>
+                            <button class="btn btn-ghost" id="clear-user-data"><i class="fas fa-trash"></i> Clear
+                                All</button>
+                            <button class="btn btn-outline" id="export-user-data"><i class="fas fa-download"></i>
+                                Export</button>
+                        </div>
+                    </div>
+
+                    <!-- CSV tab -->
+                    <div class="panel-tab-content" id="panel-csv">
+                        <div class="csv-drop-zone" id="csv-drop-zone">
+                            <input type="file" id="csv-upload" accept=".csv">
+                            <div class="csv-drop-icon"><i class="fas fa-file-upload"></i></div>
+                            <div class="csv-drop-title">Drop your CSV here or click to browse</div>
+                            <div class="csv-drop-sub">Expects: technique, dataset, backbone, refinement, spc, mean, std
+                            </div>
+                        </div>
+                        <div class="csv-status" id="csv-upload-status"></div>
+                        <div class="csv-actions">
+                            <button class="btn btn-ghost csv-clear-btn" id="clear-csv-upload"
+                                style="width:auto;padding:8px 16px;display:none">
+                                <i class="fas fa-times-circle"></i> Clear Uploaded CSV
+                            </button>
+                            <button class="btn btn-outline" id="open-help-modal" style="width:auto;padding:8px 16px;">
+                                <i class="fas fa-question-circle"></i> Format Guide
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Combined entries list (shown for both tabs) -->
+                    <div id="all-entries-section" style="display:none">
+                        <div class="entries-section-label">
+                            <i class="fas fa-list" style="margin-right:5px"></i>Loaded Combinations
+                        </div>
+                        <div id="user-data-entries"></div>
+                    </div>
+
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+    <footer>
+        H.IAAC · UNICAMP &nbsp;·&nbsp; Benchmark Analysis Tool &nbsp;·&nbsp; Updated Feb 2026 &nbsp;·&nbsp;
+        <a href="https://ieeexplore.ieee.org/document/11417778" target="_blank"
+            style="color:var(--ieee-blue);text-decoration:none">IEEE Access 2026</a>
+        &nbsp;·&nbsp;
+        <a href="https://github.com/H-IAAC/benchmarking-encoders-ssl-har" target="_blank"
+            style="color:var(--text-muted);text-decoration:none"><i class="fab fa-github"></i> GitHub</a>
+    </footer>
+
+    <script>
+        // ─── State ────────────────────────────────────────────────────────────────────
+        let performanceData = [], metadata = {}, userData = [], userCsvData = [];
+        let currentSelections = [], hiddenCurves = new Set();
+        let viewMode = 'all', tableViewMode = 'compact', currentView = 'trend';
+
+        // ─── Carefully designed palettes — perceptually distinct across 20 entries ───
+        // Benchmark: cool muted blues / purples / slate
+        const PALETTE_BENCHMARK = [
+            '#5C6BC0', '#7986CB', '#4DB6AC', '#26A69A', '#42A5F5',
+            '#29B6F6', '#66BB6A', '#9CCC65', '#26C6DA', '#EC407A',
+            '#AB47BC', '#7E57C2', '#5C85D6', '#FF7043', '#FFCA28',
+            '#8D6E63', '#78909C', '#26A69A', '#D4E157', '#FFA726'
+        ];
+        // CSV uploads: vivid warm — reds, oranges, magentas
+        const PALETTE_CSV = [
+            '#EF5350', '#F44336', '#E53935', '#F06292', '#E91E63',
+            '#FF4081', '#FF5722', '#FF7043', '#F57F17', '#F9A825',
+            '#FF6D00', '#FF3D00', '#C62828', '#AD1457', '#6A1B9A'
+        ];
+        // Manual: greens / limes — easy to tell apart from both above
+        const PALETTE_MANUAL = [
+            '#43A047', '#2E7D32', '#00897B', '#00796B', '#558B2F',
+            '#33691E', '#1B5E20', '#004D40', '#388E3C', '#81C784'
+        ];
+
+        let _bi = 0, _ci = 0, _mi = 0;
+        const _colorCache = {};
+        function resetColors() { _bi = 0; _ci = 0; _mi = 0; Object.keys(_colorCache).forEach(k => delete _colorCache[k]); }
+        function getColor(item) {
+            const key = `${item.technique}||${item.dataset}||${item.backbone}||${item.refinement}`;
+            if (_colorCache[key]) return _colorCache[key];
+            let c;
+            if (item.isUserCsv) c = PALETTE_CSV[_ci++ % PALETTE_CSV.length];
+            else if (item.isUserData) c = PALETTE_MANUAL[_mi++ % PALETTE_MANUAL.length];
+            else c = PALETTE_BENCHMARK[_bi++ % PALETTE_BENCHMARK.length];
+            return (_colorCache[key] = c);
+        }
+
+        // ─── Init ─────────────────────────────────────────────────────────────────────
+        async function init() {
+            buildPerfInputs();
+            initUserData();
+            setupPanelTabs();
+            setupToggle();
+            setupHelpModal();
+
+            try {
+                const [mRes, dRes] = await Promise.all([fetch('metadata.json'), fetch('performance_data.json')]);
+                if (!mRes.ok || !dRes.ok) throw new Error();
+                metadata = await mRes.json();
+                performanceData = await dRes.json();
+                // Normalise: rename 'method' -> 'refinement' if needed
+                performanceData = performanceData.map(r => {
+                    if (r.method !== undefined && r.refinement === undefined) r.refinement = r.method;
+                    return r;
+                });
+            } catch {
+                metadata = { techniques: [], datasets: [], backbones: [], methods: ['freeze', 'full_finetuning'], data_percentages: [1, 5, 10, 25, 50, 100, 200, 1000] };
+                performanceData = [];
+            }
+
+            buildFilterChips();
+            setupListeners();
+            updateViewModeBtn();
+            refresh();
+        }
+
+        function buildPerfInputs() {
+            const pcts = [1, 5, 10, 25, 50, 100, 200, 1000];
+            document.getElementById('perf-inputs').innerHTML = pcts.map(p => `
+        <div class="perf-input-group">
+            <div class="perf-label">${p === 1000 ? '100%' : p}</div>
+            <input type="number" step="0.1" min="0" max="100" class="perf-input" data-pct="${p}" placeholder="—">
+        </div>`).join('');
+        }
+
+        // ─── Filters & chips ──────────────────────────────────────────────────────────
+        function buildFilterChips() {
+            [['technique', 'technique-buttons'], ['dataset', 'dataset-buttons'],
+            ['backbone', 'backbone-buttons'], ['method', 'method-buttons']].forEach(([type, id]) => {
+                const el = document.getElementById(id); el.innerHTML = '';
+                const list = type === 'technique' ? metadata.techniques
+                    : type === 'dataset' ? metadata.datasets
+                        : type === 'backbone' ? metadata.backbones
+                            : metadata.methods;
+                list.forEach(val => el.appendChild(makeChip(val, type)));
+            });
+        }
+
+        function makeChip(val, type) {
+            const btn = document.createElement('button');
+            btn.className = 'filter-chip';
+            btn.textContent = fmtRefinement(val);
+            btn.dataset.value = val; btn.dataset.type = type;
+            btn.addEventListener('click', () => { toggleSel(val, type); btn.classList.toggle('active'); });
+            return btn;
+        }
+
+        function fmtRefinement(m) { return m === 'full_finetuning' ? 'Full FT' : m; }
+
+        function toggleSel(val, type) {
+            const idx = currentSelections.findIndex(s => s.type === type && s.value === val);
+            if (idx >= 0) currentSelections.splice(idx, 1);
+            else currentSelections.push({ val, type, value: val });
+            renderSelections();
+        }
+
+        window.removeSel = function (type, val) {
+            const idx = currentSelections.findIndex(s => s.type === type && s.value === val);
+            if (idx >= 0) currentSelections.splice(idx, 1);
+            document.querySelector(`.filter-chip[data-type="${type}"][data-value="${val}"]`)?.classList.remove('active');
+            renderSelections();
+            if (viewMode === 'selected') refresh();
+            updateStats();
+        };
+
+        function renderSelections() {
+            const c = document.getElementById('current-selections-list');
+            if (!currentSelections.length) { c.innerHTML = '<span class="empty-pills">No filters applied — showing all</span>'; return; }
+            const byType = {};
+            currentSelections.forEach(s => { (byType[s.type] = byType[s.type] || []).push(s.value); });
+            c.innerHTML = Object.entries(byType).map(([type, vals]) => `
+        <div class="active-pill-row">
+            <span class="active-pill-type">${type}</span>
+            ${vals.map(v => `<span class="pill">${fmtRefinement(v)}<span class="remove-pill" onclick="removeSel('${type}','${v}')">×</span></span>`).join('')}
+        </div>`).join('');
+        }
+
+        function getFilteredData() {
+            let data = [...performanceData, ...userData, ...userCsvData];
+            if (viewMode === 'selected' && currentSelections.length > 0) {
+                const byType = {};
+                currentSelections.forEach(s => { (byType[s.type] = byType[s.type] || []).push(s.value); });
+                if (byType.technique) data = data.filter(r => byType.technique.includes(r.technique));
+                if (byType.dataset) data = data.filter(r => byType.dataset.includes(r.dataset));
+                if (byType.backbone) data = data.filter(r => byType.backbone.includes(r.backbone));
+                // filter chips use type 'method' but records use 'refinement'
+                if (byType.method) data = data.filter(r => byType.method.includes(r.refinement));
+            }
+            return data.sort((a, b) => parseFloat(b.avg_performance) - parseFloat(a.avg_performance));
+        }
+
+        function refresh() {
+            const d = getFilteredData();
+            renderChart(d);
+            renderTable(d);
+            updateStats(d);
+            updateCsvUiVisibility();
+        }
+
+        function updateCsvUiVisibility() {
+            const hasCsv = userCsvData.length > 0;
+            const hasManual = userData.length > 0;
+            document.getElementById('csv-legend-dot').style.display = hasCsv ? '' : 'none';
+            document.getElementById('manual-legend-dot').style.display = hasManual ? '' : 'none';
+            document.getElementById('show-csv-only').style.display = hasCsv ? '' : 'none';
+            document.getElementById('hide-benchmark-curves').style.display = hasCsv ? '' : 'none';
+            document.getElementById('stat-csv-count').textContent = userCsvData.length;
+            document.getElementById('stat-csv-label').textContent = userCsvData.length === 1 ? 'combination loaded' : 'combinations loaded';
+            // show combined entry list if anything loaded
+            const allSection = document.getElementById('all-entries-section');
+            allSection.style.display = (hasManual || hasCsv) ? '' : 'none';
+            renderAllEntries();
+        }
+
+        function updateStats(data) {
+            if (!data) data = getFilteredData();
+            document.getElementById('stat-total').textContent = performanceData.length;
+            document.getElementById('stat-showing').textContent = data.length;
+            const best = data[0];
+            document.getElementById('stat-best-avg').textContent = best ? parseFloat(best.avg_performance).toFixed(1) + '%' : '—';
+            document.getElementById('stat-best-avg-label').textContent = best ? `${best.technique} · ${best.dataset}` : 'in current view';
+            let bestMax = -Infinity, bestMaxItem = null;
+            data.forEach(item => { const v = parseFloat(item.max_performance); if (!isNaN(v) && v > bestMax) { bestMax = v; bestMaxItem = item; } });
+            document.getElementById('stat-best-max').textContent = bestMaxItem ? bestMax.toFixed(1) + '%' : '—';
+            document.getElementById('stat-best-max-label').textContent = bestMaxItem ? `${bestMaxItem.technique} · ${bestMaxItem.backbone}` : 'peak across all spc';
+            document.getElementById('trend-count').textContent = data.length + ' curves';
+        }
+
+        // ─── Chart ────────────────────────────────────────────────────────────────────
+        let chartInst = null;
+
+        function buildLabel(item) {
+            const prefix = item.isUserCsv ? '⬆' : item.isUserData ? '★' : '';
+            const base = `${item.technique} | ${item.dataset} | ${item.backbone} | ${fmtRefinement(item.refinement)}`;
+            return prefix ? `${prefix} ${base}` : base;
+        }
+
+        function renderChart(data) {
+            const canvas = document.getElementById('trend-chart');
+            const loading = document.getElementById('trend-loading');
+            const empty = document.getElementById('trend-empty');
+            loading.style.display = 'none';
+            if (!data.length) { canvas.style.display = 'none'; empty.style.display = 'block'; document.getElementById('trend-legend').innerHTML = ''; return; }
+            canvas.style.display = 'block'; empty.style.display = 'none';
+            if (chartInst) chartInst.destroy();
+            resetColors();
+
+            const pcts = metadata.data_percentages || [1, 5, 10, 25, 50, 100, 200, 1000];
+            const datasets = data.map(item => {
+                const color = getColor(item);
+                const label = buildLabel(item);
+                const pts = pcts.map(p => {
+                    const v = item[p]; if (!v || v === 'N/A') return null;
+                    const n = parseFloat(v.split('±')[0]); return isNaN(n) ? null : n;
+                });
+                const isCsv = !!item.isUserCsv;
+                const isManual = item.isUserData && !item.isUserCsv;
+                return {
+                    label, data: pts,
+                    borderColor: color,
+                    backgroundColor: color + '18',
+                    borderWidth: (isCsv || isManual) ? 2.5 : 1.8,
+                    pointRadius: (isCsv || isManual) ? 5 : 2.5,
+                    pointBackgroundColor: color,
+                    pointBorderColor: '#fff',
+                    pointBorderWidth: (isCsv || isManual) ? 1.5 : 0.5,
+                    fill: false, tension: 0.1,
+                    hidden: hiddenCurves.has(label),
+                    _isCsv: isCsv, _isManual: isManual,
+                };
+            });
+
+            const th = getChartTheme();
+            chartInst = new Chart(canvas.getContext('2d'), {
+                type: 'line', data: { labels: pcts.map(String), datasets },
+                options: {
+                    responsive: true, maintainAspectRatio: false, animation: { duration: 250 },
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            mode: 'nearest', intersect: true,
+                            backgroundColor: th.tooltipBg, borderColor: th.tooltipBorder, borderWidth: 1,
+                            titleColor: th.tooltipTitle, bodyColor: th.tooltipBody, padding: 10,
+                            callbacks: { label: ctx => `${ctx.dataset.label}: ${ctx.parsed.y !== null ? ctx.parsed.y.toFixed(1) + '%' : 'N/A'}` }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            title: { display: true, text: 'Samples per Class', color: th.tickColor, font: { size: 11, family: "'IBM Plex Mono',monospace" } },
+                            grid: { color: th.gridColor }, ticks: { color: th.tickColor, font: { size: 11 } }
+                        },
+                        y: {
+                            title: { display: true, text: 'Accuracy (%)', color: th.tickColor, font: { size: 11, family: "'IBM Plex Mono',monospace" } },
+                            min: 0, max: 100, grid: { color: th.gridColor },
+                            ticks: { color: th.tickColor, font: { size: 11 }, callback: v => v + '%' }
+                        }
+                    }
+                }
+            });
+            renderLegend(data);
+        }
+
+        function renderLegend(data) {
+            resetColors();
+            document.getElementById('trend-legend').innerHTML = data.map(item => {
+                const color = getColor(item);
+                const label = buildLabel(item);
+                const isCsv = !!item.isUserCsv;
+                return `<div class="legend-item ${isCsv ? 'csv-item' : ''} ${hiddenCurves.has(label) ? 'faded' : ''}"
+            onclick="toggleCurve('${label.replace(/'/g, "\\'")}')">
+            <div class="legend-dot" style="background:${color}"></div><span>${label}</span>
+        </div>`;
+            }).join('');
+        }
+
+        window.toggleCurve = function (label) {
+            if (hiddenCurves.has(label)) hiddenCurves.delete(label); else hiddenCurves.add(label);
+            refresh();
+        };
+
+        // ─── Table ────────────────────────────────────────────────────────────────────
+        function renderTable(data) {
+            const table = document.getElementById('performance-table');
+            const body = document.getElementById('table-body');
+            const header = document.getElementById('table-header');
+            document.getElementById('table-loading').style.display = 'none';
+            if (!data.length) { table.style.display = 'none'; document.getElementById('table-empty').style.display = 'block'; return; }
+            table.style.display = ''; document.getElementById('table-empty').style.display = 'none';
+            const pcts = metadata.data_percentages || [];
+
+            const srcCol = '<th>Source</th>';
+            if (tableViewMode === 'detailed') {
+                header.innerHTML = `<th>#</th><th>Technique</th><th>Dataset</th><th>Encoder</th><th>Refinement</th>${srcCol}<th>Max</th><th>Min</th><th>Avg</th>${pcts.map(p => `<th>${p}</th>`).join('')}`;
+            } else {
+                header.innerHTML = `<th>#</th><th>Technique</th><th>Dataset</th><th>Encoder</th><th>Refinement</th>${srcCol}<th>Range</th><th>Avg</th><th>@ 1 spc</th><th>@ 100%</th>`;
+            }
+
+            body.innerHTML = data.map((item, rank) => {
+                const isCsv = !!item.isUserCsv;
+                const isManual = item.isUserData && !item.isUserCsv;
+                const rowClass = isCsv ? 'csv-row' : isManual ? 'user-row' : '';
+                const srcTag = isCsv
+                    ? `<span style="font-size:0.64rem;color:var(--teal);font-family:'IBM Plex Mono',monospace;background:var(--teal-dim);padding:2px 6px;border-radius:3px;border:1px solid rgba(14,138,123,0.2)">⬆ csv</span>`
+                    : isManual
+                        ? `<span style="font-size:0.64rem;color:var(--orange-dark);font-family:'IBM Plex Mono',monospace;background:var(--orange-dim);padding:2px 6px;border-radius:3px;border:1px solid rgba(245,166,35,0.2)">★ manual</span>`
+                        : `<span style="font-size:0.64rem;color:var(--text-muted);font-family:'IBM Plex Mono',monospace">benchmark</span>`;
+                const mb = item.refinement === 'freeze'
+                    ? `<span class="badge badge-freeze">Freeze</span>`
+                    : `<span class="badge badge-ft">Full FT</span>`;
+                const rankCell = rank === 0 ? `<span style="color:var(--orange-dark);font-weight:700">🥇 1</span>`
+                    : rank === 1 ? `<span style="color:#6B7280">🥈 2</span>`
+                        : rank === 2 ? `<span style="color:#92400E">🥉 3</span>`
+                            : `<span style="color:var(--text-muted)">${rank + 1}</span>`;
+
+                if (tableViewMode === 'detailed') {
+                    return `<tr class="${rowClass}">
+                <td style="text-align:center">${rankCell}</td>
+                <td>${item.technique}</td><td>${item.dataset}</td><td>${item.backbone}</td><td>${mb}</td>
+                <td>${srcTag}</td>
+                <td style="font-weight:600">${item.max_performance}</td>
+                <td>${item.min_performance}</td>
+                <td style="font-weight:700;color:var(--purple)">${item.avg_performance}</td>
+                ${pcts.map(p => `<td>${item[p] || '—'}</td>`).join('')}
+            </tr>`;
+                } else {
+                    const p1 = item['1'] ? item['1'].split('±')[0].trim() : '—';
+                    const p100 = (item['1000'] || item['100']) ? ((item['1000'] || item['100']).split('±')[0].trim()) : '—';
+                    return `<tr class="${rowClass}">
+                <td style="text-align:center">${rankCell}</td>
+                <td>${item.technique}</td><td>${item.dataset}</td><td>${item.backbone}</td><td>${mb}</td>
+                <td>${srcTag}</td>
+                <td style="font-family:'IBM Plex Mono',monospace;font-size:0.74rem">${item.min_performance}–${item.max_performance}</td>
+                <td style="font-weight:700;color:var(--purple)">${item.avg_performance}</td>
+                <td>${p1}</td><td>${p100}</td>
+            </tr>`;
+                }
+            }).join('');
+            highlightBest();
+        }
+
+        function highlightBest() {
+            const rows = document.querySelectorAll('#table-body tr');
+            if (!rows.length) return;
+            const startCol = tableViewMode === 'detailed' ? 6 : 7;
+            const cols = document.querySelectorAll('#table-header th').length;
+            for (let c = startCol; c < cols; c++) {
+                let best = -Infinity, bestCell = null;
+                rows.forEach(row => {
+                    const cell = row.cells[c]; if (!cell) return;
+                    const val = parseFloat(cell.textContent.replace(/±.*/, '').replace('—', ''));
+                    if (!isNaN(val) && val > best) { best = val; bestCell = cell; }
+                });
+                if (bestCell) bestCell.classList.add('best-cell');
+            }
+        }
+
+        // ─── CSV Upload ───────────────────────────────────────────────────────────────
+        function parseCsv(text) {
+            const lines = text.trim().split(/\r?\n/);
+            if (lines.length < 2) throw new Error('CSV is empty or has no data rows');
+            const header = lines[0].split(',').map(s => s.trim().toLowerCase());
+            // Accept both 'method' and 'refinement' column names
+            const refinementCol = header.includes('refinement') ? 'refinement' : header.includes('method') ? 'method' : null;
+            if (!refinementCol) throw new Error('Missing column: "refinement" (or "method")');
+            const required = ['technique', 'dataset', 'backbone', 'spc', 'mean', 'std'];
+            for (const col of required) if (!header.includes(col)) throw new Error(`Missing column: "${col}"`);
+            const idx = Object.fromEntries([...required, 'spc'].map(c => [c, header.indexOf(c)]));
+            idx.refinement = header.indexOf(refinementCol);
+            const rows = [];
+            for (let i = 1; i < lines.length; i++) {
+                const line = lines[i].trim(); if (!line) continue;
+                const parts = line.split(',').map(s => s.trim());
+                const mean = parseFloat(parts[idx.mean]); if (isNaN(mean)) continue;
+                const std = parseFloat(parts[idx.std]);
+                rows.push({
+                    technique: parts[idx.technique],
+                    dataset: parts[idx.dataset],
+                    backbone: parts[idx.backbone],
+                    refinement: parts[idx.refinement],
+                    spc: String(parts[idx.spc]).trim(),
+                    mean, std: isNaN(std) ? 0 : std,
+                });
+            }
+            if (!rows.length) throw new Error('No valid data rows found');
+            return rows;
+        }
+
+        function csvRowsToRecords(rows) {
+            const groups = {};
+            rows.forEach(r => {
+                const key = `${r.technique}||${r.dataset}||${r.backbone}||${r.refinement}`;
+                if (!groups[key]) groups[key] = { technique: r.technique, dataset: r.dataset, backbone: r.backbone, refinement: r.refinement, points: {} };
+                groups[key].points[r.spc] = `${r.mean.toFixed(1)} ± ${r.std.toFixed(1)}`;
+            });
+            return Object.values(groups).map(g => {
+                const means = Object.values(g.points).map(v => parseFloat(v.split('±')[0])).filter(v => !isNaN(v));
+                const rec = {
+                    technique: g.technique, dataset: g.dataset, backbone: g.backbone, refinement: g.refinement,
+                    isUserData: true, isUserCsv: true,
+                    max_performance: means.length ? Math.max(...means).toFixed(1) : 'N/A',
+                    min_performance: means.length ? Math.min(...means).toFixed(1) : 'N/A',
+                    avg_performance: means.length ? (means.reduce((a, b) => a + b, 0) / means.length).toFixed(1) : '0.0',
+                };
+                (metadata.data_percentages || [1, 5, 10, 25, 50, 100, 200, 1000]).forEach(p => { rec[p] = g.points[String(p)] || 'N/A'; });
+                return rec;
+            });
+        }
+
+        function updateFilterChipsFor(entries) {
+            const types = { technique: 'technique-buttons', dataset: 'dataset-buttons', backbone: 'backbone-buttons' };
+            entries.forEach(entry => {
+                Object.entries({ technique: entry.technique, dataset: entry.dataset, backbone: entry.backbone }).forEach(([type, val]) => {
+                    if (!document.querySelector(`.filter-chip[data-type="${type}"][data-value="${val}"]`)) {
+                        const el = document.getElementById(types[type]); if (el) el.appendChild(makeChip(val, type));
+                        const arr = type === 'technique' ? metadata.techniques : type === 'dataset' ? metadata.datasets : metadata.backbones;
+                        if (arr && !arr.includes(val)) arr.push(val);
+                    }
+                });
+            });
+        }
+
+        function handleCsvUpload(file) {
+            const status = document.getElementById('csv-upload-status');
+            const clearBtn = document.getElementById('clear-csv-upload');
+            const reader = new FileReader();
+            reader.onload = e => {
+                try {
+                    userCsvData = csvRowsToRecords(parseCsv(e.target.result));
+                    updateFilterChipsFor(userCsvData);
+                    refresh();
+                    status.className = 'csv-status success';
+                    status.textContent = `✓ ${userCsvData.length} combination${userCsvData.length !== 1 ? 's' : ''} loaded from "${file.name}"`;
+                    clearBtn.style.display = '';
+                } catch (err) {
+                    userCsvData = [];
+                    status.className = 'csv-status error';
+                    status.textContent = `✗ ${err.message}`;
+                    clearBtn.style.display = 'none';
+                    refresh();
+                }
+            };
+            reader.onerror = () => { status.className = 'csv-status error'; status.textContent = '✗ Failed to read file'; };
+            reader.readAsText(file);
+        }
+
+        function clearCsvUpload() {
+            userCsvData = [];
+            document.getElementById('csv-upload').value = '';
+            const s = document.getElementById('csv-upload-status');
+            s.className = 'csv-status'; s.textContent = '';
+            document.getElementById('clear-csv-upload').style.display = 'none';
+            refresh();
+        }
+
+        // ─── Manual user data ─────────────────────────────────────────────────────────
+        function initUserData() {
+            try { userData = JSON.parse(localStorage.getItem('benchmarkUserData') || '[]'); } catch { userData = []; }
+            userData = userData.map(e => { delete e.isUserCsv; return { ...e, isUserData: true }; });
+        }
+
+        function addUserData() {
+            const technique = document.getElementById('user-technique').value.trim();
+            const dataset = document.getElementById('user-dataset').value.trim();
+            const backbone = document.getElementById('user-backbone').value.trim();
+            const refinement = document.getElementById('user-method').value;
+            if (!technique || !dataset || !backbone) { alert('Please fill Technique, Dataset, and Encoder.'); return; }
+            const pcts = metadata.data_percentages || [1, 5, 10, 25, 50, 100, 200, 1000];
+            const perfs = {}; let any = false;
+            pcts.forEach(p => { const el = document.querySelector(`.perf-input[data-pct="${p}"]`); const v = parseFloat(el?.value); if (!isNaN(v)) { perfs[p] = `${v.toFixed(1)} ± 0.0`; any = true; } });
+            if (!any) { alert('Enter at least one performance value.'); return; }
+            const vals = Object.values(perfs).map(v => parseFloat(v));
+            userData.push({
+                technique, dataset, backbone, refinement, isUserData: true,
+                max_performance: Math.max(...vals).toFixed(1),
+                min_performance: Math.min(...vals).toFixed(1),
+                avg_performance: (vals.reduce((a, b) => a + b, 0) / vals.length).toFixed(1),
+                ...perfs
+            });
+            localStorage.setItem('benchmarkUserData', JSON.stringify(userData));
+            clearUserForm();
+            updateFilterChipsFor(userData);
+            refresh();
+        }
+
+        function renderAllEntries() {
+            const c = document.getElementById('user-data-entries');
+            const all = [...userData, ...userCsvData];
+            if (!all.length) { c.innerHTML = ''; return; }
+            c.innerHTML = [
+                ...userData.map((e, i) => entryRow(e, i, 'manual')),
+                ...userCsvData.map((e, i) => entryRow(e, i, 'csv')),
+            ].join('');
+        }
+
+        function entryRow(e, i, type) {
+            const label = type === 'csv' ? '⬆ CSV' : '★ Manual';
+            const color = type === 'csv' ? 'var(--teal)' : 'var(--orange)';
+            const removeCall = type === 'csv' ? `removeCsvEntry(${i})` : `removeUser(${i})`;
+            return `<div class="user-data-row ${type === 'csv' ? 'csv' : ''} fade-in">
+        <div class="user-data-meta">
+            <strong>${e.technique}</strong> · ${e.dataset} · ${e.backbone} · ${fmtRefinement(e.refinement)}
+            <span style="color:${color}">${label}</span>
+            <span>Avg: ${e.avg_performance}% &nbsp;|&nbsp; Max: ${e.max_performance}% &nbsp;|&nbsp; Min: ${e.min_performance}%</span>
+        </div>
+        <div class="user-data-actions">
+            <button class="sm-btn danger" onclick="${removeCall}"><i class="fas fa-times"></i></button>
+        </div>
+    </div>`;
+        }
+
+        window.removeUser = function (i) {
+            userData.splice(i, 1);
+            localStorage.setItem('benchmarkUserData', JSON.stringify(userData));
+            refresh();
+        };
+
+        window.removeCsvEntry = function (i) {
+            userCsvData.splice(i, 1);
+            if (!userCsvData.length) clearCsvUpload();
+            else refresh();
+        };
+
+        function clearUserForm() {
+            ['user-technique', 'user-dataset', 'user-backbone'].forEach(id => document.getElementById(id).value = '');
+            document.getElementById('user-method').value = 'freeze';
+            document.querySelectorAll('.perf-input').forEach(el => el.value = '');
+        }
+
+        // ─── Export ───────────────────────────────────────────────────────────────────
+        function exportUserData() {
+            if (!userData.length) { alert('No manual data to export.'); return; }
+            const pcts = metadata.data_percentages || [];
+            const rows = [['Technique', 'Dataset', 'Encoder', 'Refinement', 'Max', 'Min', 'Avg', ...pcts].join(',')];
+            userData.forEach(e => rows.push([e.technique, e.dataset, e.backbone, e.refinement, e.max_performance, e.min_performance, e.avg_performance, ...pcts.map(p => e[p] || 'N/A')].join(',')));
+            dl(rows.join('\n'), 'my_benchmark_data.csv');
+        }
+
+        function exportComparison() {
+            const data = getFilteredData(); const pcts = metadata.data_percentages || [];
+            const rows = [['Technique', 'Dataset', 'Encoder', 'Refinement', 'Source', 'Max', 'Min', 'Avg', ...pcts].join(',')];
+            data.forEach(e => {
+                const src = e.isUserCsv ? 'uploaded_csv' : e.isUserData ? 'manual' : 'benchmark';
+                rows.push([e.technique, e.dataset, e.backbone, e.refinement, src, e.max_performance, e.min_performance, e.avg_performance, ...pcts.map(p => e[p] || 'N/A')].join(','));
+            });
+            dl(rows.join('\n'), `performance_comparison_${new Date().toISOString().split('T')[0]}.csv`);
+        }
+
+        function dl(text, filename) {
+            const a = Object.assign(document.createElement('a'), { href: URL.createObjectURL(new Blob([text], { type: 'text/csv' })), download: filename });
+            document.body.appendChild(a); a.click(); document.body.removeChild(a);
+        }
+
+        // ─── View mode ────────────────────────────────────────────────────────────────
+        function updateViewModeBtn() {
+            const btn = document.getElementById('view-selected');
+            if (viewMode === 'selected') { btn.innerHTML = '<i class="fas fa-eye"></i> Show All Data'; btn.classList.add('btn-secondary'); btn.classList.remove('btn-ghost'); }
+            else { btn.innerHTML = '<i class="fas fa-filter"></i> Show Selected Only'; btn.classList.remove('btn-secondary'); btn.classList.add('btn-ghost'); }
+        }
+
+        // ─── Panel sub-tabs ───────────────────────────────────────────────────────────
+        function setupPanelTabs() {
+            document.querySelectorAll('.panel-tab').forEach(tab => {
+                tab.addEventListener('click', () => {
+                    document.querySelectorAll('.panel-tab').forEach(t => t.classList.remove('active'));
+                    document.querySelectorAll('.panel-tab-content').forEach(c => c.classList.remove('active'));
+                    tab.classList.add('active');
+                    document.getElementById('panel-' + tab.dataset.panel).classList.add('active');
+                });
+            });
+        }
+
+        // ─── Collapsible panel ────────────────────────────────────────────────────────
+        function setupToggle() {
+            document.getElementById('user-panel-toggle').addEventListener('click', () => {
+                const body = document.getElementById('user-panel-body');
+                const chevron = document.getElementById('user-panel-chevron');
+                const header = document.getElementById('user-panel-toggle');
+                body.classList.toggle('open'); header.classList.toggle('open');
+                chevron.style.transform = body.classList.contains('open') ? 'rotate(180deg)' : '';
+            });
+        }
+
+        // ─── Help Modal ───────────────────────────────────────────────────────────────
+        function setupHelpModal() {
+            const overlay = document.getElementById('help-modal');
+            document.getElementById('open-help-modal').addEventListener('click', () => overlay.classList.add('open'));
+            document.getElementById('help-modal-close').addEventListener('click', () => overlay.classList.remove('open'));
+            overlay.addEventListener('click', e => { if (e.target === overlay) overlay.classList.remove('open'); });
+            document.addEventListener('keydown', e => { if (e.key === 'Escape') overlay.classList.remove('open'); });
+        }
+
+        // ─── Drag-and-drop on CSV zone ────────────────────────────────────────────────
+        function setupDragDrop() {
+            const zone = document.getElementById('csv-drop-zone');
+            zone.addEventListener('dragover', e => { e.preventDefault(); zone.classList.add('dragging'); });
+            zone.addEventListener('dragleave', () => zone.classList.remove('dragging'));
+            zone.addEventListener('drop', e => {
+                e.preventDefault(); zone.classList.remove('dragging');
+                const file = e.dataTransfer.files[0];
+                if (file) handleCsvUpload(file);
+            });
+        }
+
+        // ─── All listeners ────────────────────────────────────────────────────────────
+        function setupListeners() {
+            document.getElementById('compare-selected').addEventListener('click', () => {
+                if (viewMode !== 'selected') { viewMode = 'selected'; updateViewModeBtn(); } refresh();
+            });
+            document.getElementById('view-selected').addEventListener('click', () => {
+                viewMode = viewMode === 'all' ? 'selected' : 'all'; updateViewModeBtn(); refresh();
+            });
+            document.getElementById('clear-selections').addEventListener('click', () => {
+                currentSelections = []; hiddenCurves.clear();
+                document.querySelectorAll('.filter-chip').forEach(b => b.classList.remove('active'));
+                renderSelections(); refresh();
+            });
+            document.getElementById('export-data').addEventListener('click', exportComparison);
+            document.getElementById('add-user-data').addEventListener('click', addUserData);
+            document.getElementById('clear-user-data').addEventListener('click', () => {
+                if (confirm('Remove all manual entries?')) {
+                    userData = []; localStorage.removeItem('benchmarkUserData'); refresh();
+                }
+            });
+            document.getElementById('export-user-data').addEventListener('click', exportUserData);
+            document.getElementById('csv-upload').addEventListener('change', e => { const f = e.target.files[0]; if (f) handleCsvUpload(f); });
+            document.getElementById('clear-csv-upload').addEventListener('click', clearCsvUpload);
+
+            document.getElementById('show-csv-only').addEventListener('click', () => {
+                if (!chartInst) return;
+                hiddenCurves.clear();
+                chartInst.data.datasets.forEach(d => { if (!d._isCsv) hiddenCurves.add(d.label); });
+                refresh();
+            });
+            document.getElementById('hide-benchmark-curves').addEventListener('click', () => {
+                if (!chartInst) return;
+                chartInst.data.datasets.forEach(d => { if (d._isCsv) hiddenCurves.add(d.label); });
+                refresh();
+            });
+
+            document.getElementById('trend-view').addEventListener('click', () => {
+                currentView = 'trend';
+                document.getElementById('trend-view').classList.add('active'); document.getElementById('table-view').classList.remove('active');
+                document.getElementById('chart-card').style.display = ''; document.getElementById('table-card').style.display = 'none';
+            });
+            document.getElementById('table-view').addEventListener('click', () => {
+                currentView = 'table';
+                document.getElementById('table-view').classList.add('active'); document.getElementById('trend-view').classList.remove('active');
+                document.getElementById('table-card').style.display = ''; document.getElementById('chart-card').style.display = 'none';
+            });
+
+            document.querySelectorAll('.toggle-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    tableViewMode = btn.dataset.spread;
+                    document.querySelectorAll('.toggle-btn').forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active'); refresh();
+                });
+            });
+
+            document.getElementById('show-all-curves').addEventListener('click', () => { hiddenCurves.clear(); refresh(); });
+            document.getElementById('hide-all-curves').addEventListener('click', () => { if (chartInst) chartInst.data.datasets.forEach(d => hiddenCurves.add(d.label)); refresh(); });
+            document.getElementById('reset-curves').addEventListener('click', () => { hiddenCurves.clear(); refresh(); });
+
+            setupDragDrop();
+        }
+
+        // ─── Dark mode ────────────────────────────────────────────────────────────────
+        function getChartTheme() {
+            const dark = document.documentElement.getAttribute('data-theme') === 'dark';
+            return {
+                gridColor: dark ? 'rgba(255,255,255,0.06)' : '#EFEDE7',
+                tickColor: dark ? '#55556A' : '#8A8278',
+                tooltipBg: dark ? '#1E1E26' : '#fff',
+                tooltipBorder: dark ? 'rgba(255,255,255,0.1)' : '#E0DDD4',
+                tooltipTitle: dark ? '#EEEEF5' : '#1A1814',
+                tooltipBody: dark ? '#9A9AAD' : '#4A4640',
+            };
+        }
+
+        function applyTheme(dark) {
+            document.documentElement.setAttribute('data-theme', dark ? 'dark' : 'light');
+            document.getElementById('theme-icon').className = `fas fa-${dark ? 'sun' : 'moon'} theme-icon`;
+            document.getElementById('theme-label').textContent = dark ? 'Light' : 'Dark';
+            localStorage.setItem('benchmarkTheme', dark ? 'dark' : 'light');
+            if (chartInst) refresh();
+        }
+
+        function initTheme() {
+            const saved = localStorage.getItem('benchmarkTheme');
+            const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            applyTheme(saved ? saved === 'dark' : prefersDark);
+            document.getElementById('theme-toggle').addEventListener('click', () => {
+                applyTheme(document.documentElement.getAttribute('data-theme') !== 'dark');
+            });
+        }
+
+        init();
+        initTheme();
+    </script>
+</body>
+
+</html>

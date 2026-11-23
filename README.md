@@ -10,7 +10,7 @@ for Smartphone-Based Human Activity Recognition
     <a href="https://zenodo.org/records/19301058">
         <img alt="Zenodo" src="https://img.shields.io/badge/Zenodo-Models-blue">
     </a>
-    <a href="https://www.students.ic.unicamp.br/~ra271582/paper_encoders/benchmark_tool.html">
+    <a href="https://h-iaac.github.io/benchmarking-encoders-ssl-har/">
         <img alt="Benchmark Tool" src="https://img.shields.io/badge/Benchmark-Interactive_Tool-purple">
     </a>
 </p>

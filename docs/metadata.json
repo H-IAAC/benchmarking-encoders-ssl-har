@@ -1,0 +1,42 @@
+{
+  "techniques": [
+    "Diet",
+    "LFR",
+    "Supervised",
+    "TFC",
+    "TNC"
+  ],
+  "datasets": [
+    "KH",
+    "MS",
+    "RW-Thigh",
+    "RW-Waist",
+    "UCI",
+    "WISDM"
+  ],
+  "backbones": [
+    "CNN-PFF",
+    "IMU Transformer",
+    "RNN",
+    "ResNet-1D",
+    "ResNet-SE-5",
+    "TS-TCC Encoder",
+    "TS2Vec Encoder"
+  ],
+  "methods": [
+    "freeze",
+    "full_finetuning"
+  ],
+  "data_percentages": [
+    1,
+    5,
+    10,
+    25,
+    50,
+    100,
+    200,
+    1000
+  ],
+  "total_records": 378,
+  "last_updated": "2025-11-10T21:17:17.169079"
+}
